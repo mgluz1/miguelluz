@@ -1,0 +1,275 @@
+.experience {
+  border-top: 1px solid var(--c-border);
+}
+
+.experience__grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 960px) {
+  .experience__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .experience__side {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+  }
+}
+
+.experience__side {
+  display: grid;
+  gap: var(--space-5);
+}
+
+/* ---------- Cartão de experiência ---------- */
+
+.job {
+  display: grid;
+  gap: var(--space-4);
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  background: var(--c-surface);
+}
+
+.job--compact {
+  background: transparent;
+  border-style: dashed;
+}
+
+.job__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.job__org {
+  font-size: var(--fs-h3);
+  letter-spacing: -0.02em;
+}
+
+.job__org--sm {
+  font-size: 1.25rem;
+}
+
+.job__role {
+  margin-top: 2px;
+  color: var(--c-text-2);
+  font-weight: 500;
+}
+
+.job__team {
+  margin-left: 4px;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--c-surface-2);
+  color: var(--c-green);
+}
+
+.job__period {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--c-text-2);
+  white-space: nowrap;
+}
+
+.job__live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-state-done);
+  box-shadow: 0 0 0 3px rgb(47 158 106 / 0.16);
+}
+
+.job__summary {
+  color: var(--c-text-2);
+  max-width: var(--measure);
+}
+
+.job__label {
+  margin-top: var(--space-2);
+  color: var(--c-text-2);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.job__contribs {
+  display: grid;
+}
+
+.job__contribs li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: start;
+  gap: var(--space-4);
+  padding: 12px 0;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.9375rem;
+}
+
+.job__contribs .tag {
+  justify-self: start;
+}
+
+@media (max-width: 480px) {
+  .job__contribs li {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
+
+.job__list {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.1rem;
+  color: var(--c-text);
+  font-size: 0.9375rem;
+}
+
+.job__list li::marker {
+  color: var(--c-green);
+}
+
+/* ---------- Ilustração de vigência ---------- */
+
+.contracts {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.contracts .window {
+  box-shadow: var(--shadow-demo);
+}
+
+.contracts__badge {
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: rgb(180 83 42 / 0.12);
+  color: var(--c-alert);
+  font-size: 0.6875rem;
+}
+
+.contracts__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.contracts__table th {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text-2);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.contracts__table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: middle;
+}
+
+.contracts__table tr:last-child td {
+  border-bottom: 0;
+}
+
+.contracts__id {
+  display: block;
+  font-weight: 600;
+}
+
+.contracts__obj {
+  display: block;
+  color: var(--c-text-2);
+  font-size: 0.75rem;
+}
+
+.contracts__row--alert td {
+  background: rgb(180 83 42 / 0.05);
+}
+
+.contracts__chip {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+.contracts__chip--alert {
+  border-color: rgb(180 83 42 / 0.3);
+  background: rgb(180 83 42 / 0.1);
+  color: var(--c-alert);
+}
+
+.contracts__chip--warn {
+  border-color: rgb(201 161 59 / 0.4);
+  background: rgb(201 161 59 / 0.12);
+  color: #7a5e14;
+}
+
+.contracts__chip--ok {
+  border-color: color-mix(in srgb, var(--c-green) 25%, transparent);
+  background: var(--c-mint-soft);
+  color: var(--c-green);
+}
+
+/* Linhas entram em sequência e o alerta "muda de estado" por último */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal .contracts__table tbody tr {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 700ms var(--ease-out);
+    transition-delay: calc(300ms + var(--r) * 110ms);
+  }
+
+  .js .reveal.is-visible .contracts__table tbody tr {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .reveal .contracts__chip--alert {
+    transition:
+      background-color 500ms var(--ease-out),
+      color 500ms var(--ease-out),
+      border-color 500ms var(--ease-out);
+    transition-delay: 1100ms;
+  }
+
+  .js .reveal:not(.is-visible) .contracts__chip--alert {
+    border-color: color-mix(in srgb, var(--c-green) 25%, transparent);
+    background: var(--c-mint-soft);
+    color: var(--c-green);
+  }
+}
+
+.contracts__caption {
+  color: var(--c-text-2);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+.contracts__table td.mono {
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .contracts__table th,
+  .contracts__table td {
+    padding-inline: 10px;
+  }
+}

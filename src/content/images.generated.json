@@ -1,0 +1,65 @@
+{
+  "hm2-hero": {
+    "width": 1600,
+    "height": 761,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "hm2-aeronaves": {
+    "width": 1200,
+    "height": 573,
+    "widths": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "hm2-ficha": {
+    "width": 1200,
+    "height": 575,
+    "widths": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "moraesluz-hero": {
+    "width": 1600,
+    "height": 874,
+    "widths": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "moraesluz-historia": {
+    "width": 1200,
+    "height": 594,
+    "widths": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "moraesluz-diferenciais": {
+    "width": 1200,
+    "height": 653,
+    "widths": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "miguel-retrato": {
+    "width": 900,
+    "height": 1155,
+    "widths": [
+      360,
+      560,
+      900
+    ]
+  }
+}

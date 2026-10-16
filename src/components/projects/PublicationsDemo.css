@@ -1,0 +1,158 @@
+.pubs {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.pubs__window {
+  box-shadow: var(--shadow-md);
+}
+
+.pubs__count {
+  color: var(--c-green);
+  font-size: 0.6875rem;
+}
+
+.pubs__table {
+  display: grid;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  font-size: 0.8125rem;
+  /* Altura reservada para 6 linhas + cabeçalho: evita saltos ao recolher duplicatas */
+  min-height: calc(7 * 2.75rem + 1rem);
+  align-content: start;
+}
+
+.pubs__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  max-height: 2.75rem;
+  min-height: 0;
+  padding: 0 var(--space-2);
+  overflow: hidden;
+  border-bottom: 1px solid var(--c-dark-border);
+  color: var(--c-dark-text);
+  transition:
+    max-height 600ms var(--ease-out),
+    opacity 500ms var(--ease-out),
+    background-color 400ms var(--ease-out),
+    border-color 400ms var(--ease-out);
+}
+
+.pubs__row > * {
+  padding-block: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pubs__row--head {
+  color: var(--c-dark-text-2);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pubs__proc {
+  color: var(--c-dark-text-2);
+  font-size: 0.75rem;
+}
+
+.pubs__cell-urg {
+  position: relative;
+  display: grid;
+}
+
+.pubs__cell-urg > * {
+  grid-area: 1 / 1;
+  justify-self: start;
+  transition: opacity 400ms var(--ease-out), transform 500ms var(--ease-out);
+  transition-delay: calc(var(--r, 0) * 70ms);
+}
+
+.pubs__pending {
+  color: var(--c-dark-text-2);
+}
+
+.pubs__urgency {
+  padding: 1px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-size: 0.6875rem;
+}
+
+.pubs__urgency--alta {
+  border-color: rgb(180 83 42 / 0.35);
+  background: rgb(180 83 42 / 0.12);
+  color: #9a3412;
+}
+
+.pubs__urgency--media {
+  border-color: rgb(201 161 59 / 0.45);
+  background: rgb(201 161 59 / 0.18);
+  color: #7a5e14;
+}
+
+.pubs__urgency--baixa {
+  border-color: rgb(56 211 133 / 0.4);
+  background: rgb(56 211 133 / 0.14);
+  color: var(--c-green);
+}
+
+.pubs__urgency--dup {
+  border-color: var(--c-dark-border);
+  color: var(--c-dark-text-2);
+}
+
+/* ---------- Estados ---------- */
+
+/* Coletar: tudo cru, urgência pendente */
+.pubs__table[data-stage="coletar"] .pubs__urgency,
+.pubs__table[data-stage="deduplicar"] .pubs__row:not(.is-dup) .pubs__urgency {
+  opacity: 0;
+  transform: translateX(-6px);
+}
+
+/* Deduplicar: repetidas marcadas */
+.pubs__table[data-stage="deduplicar"] .is-dup {
+  background: rgb(15 23 42 / 0.03);
+}
+
+.pubs__table[data-stage="deduplicar"] .is-dup > span:not(.pubs__cell-urg) {
+  color: var(--c-dark-text-2);
+  text-decoration: line-through;
+  text-decoration-color: rgb(15 23 42 / 0.35);
+}
+
+.pubs__table[data-stage="deduplicar"] .is-dup .pubs__pending,
+.pubs__table[data-stage="classificar"] .pubs__pending {
+  opacity: 0;
+}
+
+/* Classificar: duplicatas recolhidas, urgência visível */
+.pubs__table[data-stage="classificar"] .is-dup {
+  max-height: 0;
+  opacity: 0;
+  border-color: transparent;
+}
+
+.pubs__caption {
+  color: var(--c-dark-text-2);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .pubs__row {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr) minmax(0, 0.9fr);
+  }
+
+  /* No celular, a coluna "Tipo" sai para caber a urgência */
+  .pubs__row > :nth-child(2) {
+    display: none;
+  }
+
+  .pubs__proc {
+    font-size: 0.6875rem;
+  }
+}

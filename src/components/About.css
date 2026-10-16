@@ -1,0 +1,197 @@
+/* Três colunas lado a lado: foto | texto | formação */
+.about__grid {
+  display: grid;
+  gap: clamp(2rem, 1.5rem + 2vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.25fr) minmax(0, 0.9fr);
+  }
+
+  .about__photo {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+  }
+}
+
+.about__photo {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 330px;
+}
+
+.about__photo-frame {
+  position: relative;
+  overflow: hidden;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition:
+    transform 600ms var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out);
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(circle at 70% 25%, rgb(56 211 133 / 0.55), transparent 60%),
+    linear-gradient(180deg, var(--c-mint-soft), var(--c-surface-2));
+}
+
+/* Linhas de grade atrás do retrato — conexão com o motivo das janelas */
+.about__photo-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(10 122 73 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(10 122 73 / 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.about__photo-frame img {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 96%;
+  max-width: none;
+  translate: -50% 0;
+  transition: scale 700ms var(--ease-out);
+}
+
+/* Luz que segue o cursor sobre a foto */
+.about__photo-spot {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 30%), rgb(56 211 133 / 0.22), transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-ui) var(--ease-out);
+}
+
+/* Hover (só com mouse): a foto cresce um pouco, a moldura ganha sombra e a luz aparece */
+@media (hover: hover) and (pointer: fine) {
+  .about__photo-frame:hover {
+    border-color: color-mix(in srgb, var(--c-brand) 55%, transparent);
+    box-shadow: var(--shadow-demo);
+  }
+
+  .about__photo-frame:hover .about__photo-spot {
+    opacity: 1;
+  }
+
+  .about__photo-frame:hover img {
+    scale: 1.035;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__photo-frame {
+    transform: none;
+  }
+}
+
+.about__photo-caption {
+  color: var(--c-text-2);
+}
+
+.about__copy .section-header {
+  margin-bottom: var(--space-5);
+}
+
+.about__copy .h2 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+}
+
+.about__bio {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--measure);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.about__bio p:not(:first-child) {
+  color: var(--c-text-2);
+}
+
+.about__edu {
+  padding-top: var(--space-1);
+}
+
+.about__label {
+  margin-bottom: var(--space-4);
+  color: var(--c-text-2);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 6px;
+  width: 1px;
+  background: var(--c-border-strong);
+}
+
+.timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 13px 1fr;
+  gap: var(--space-4);
+}
+
+.timeline__node {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  margin-top: 5px;
+  border: 2px solid var(--c-brand);
+  border-radius: 4px;
+  background: var(--c-bg);
+}
+
+.timeline__item:first-child .timeline__node {
+  background: var(--c-mint-soft);
+}
+
+.timeline__period {
+  color: var(--c-green);
+}
+
+.timeline__title {
+  font-weight: 600;
+}
+
+.timeline__title span {
+  color: var(--c-text-2);
+  font-weight: 500;
+}
+
+.timeline__note {
+  color: var(--c-text-2);
+  font-size: 0.875rem;
+}
+
+/* Celular/tablet: empilhado — texto, formação e por último a foto */
+@media (max-width: 959px) {
+  .about__photo {
+    order: 3;
+    max-width: 300px;
+    justify-self: center;
+  }
+
+  .about__edu {
+    order: 2;
+  }
+}

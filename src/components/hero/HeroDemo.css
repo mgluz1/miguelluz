@@ -1,0 +1,416 @@
+/* ===================================================================
+   HeroDemo — janela que ganha estrutura, conteúdo e é publicada.
+   O estado vem de [data-stage] em .mock; cada etapa só troca estilos.
+   =================================================================== */
+
+.hero-demo {
+  --cafe: #8a4b25;
+  --cafe-soft: #f6ece2;
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 30%;
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  perspective: 1400px;
+}
+
+.hero-demo__stage {
+  position: relative;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 600ms var(--ease-out);
+}
+
+.hero-demo__window {
+  box-shadow: var(--shadow-demo);
+}
+
+/* Spotlight que segue o cursor (só com ponteiro fino — useTilt ativa data-tilt) */
+.hero-demo__spot {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgb(56 211 133 / 0.16), transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-ui) var(--ease-out);
+}
+
+.hero-demo[data-tilt="on"]:hover .hero-demo__spot {
+  opacity: 1;
+}
+
+.hero-demo__lock {
+  display: inline-block;
+  width: 7px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 1.5px;
+  background: var(--c-state-done);
+  vertical-align: -0.5px;
+}
+
+.hero-demo__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  background: var(--c-surface);
+  color: var(--c-text-2);
+  font-size: 0.6875rem;
+  transition:
+    color var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out);
+}
+
+.hero-demo__status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-state-progress);
+}
+
+.hero-demo__status.is-live {
+  border-color: color-mix(in srgb, var(--c-state-done) 35%, transparent);
+  background: var(--c-mint-soft);
+  color: var(--c-green);
+}
+
+.hero-demo__status.is-live i {
+  background: var(--c-state-done);
+  box-shadow: 0 0 0 3px rgb(47 158 106 / 0.18);
+}
+
+/* ---------- Cena ---------- */
+
+.mock {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  padding: clamp(10px, 2.4%, 16px);
+  overflow: hidden;
+  background-color: #fbfbf9;
+  background-image: radial-gradient(var(--c-border) 1px, transparent 1px);
+  background-size: 14px 14px;
+  font-size: clamp(9px, 1.35vw, 12px);
+  line-height: 1.35;
+}
+
+@media (min-width: 960px) {
+  .mock {
+    font-size: clamp(9px, 0.95vw, 12px);
+  }
+}
+
+/* Briefing */
+.mock__brief {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  z-index: 2;
+  width: min(78%, 330px);
+  padding: 1.2em 1.4em;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-md);
+  translate: -50% 0;
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 700ms var(--ease-out);
+}
+
+.mock__brief-file {
+  margin-bottom: 0.8em;
+  color: var(--c-green);
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.mock__brief dl {
+  display: grid;
+  gap: 0.7em;
+}
+
+.mock__brief dl div {
+  display: grid;
+  grid-template-columns: 6.2em 1fr;
+  gap: 0.6em;
+}
+
+.mock__brief dt {
+  color: var(--c-text-2);
+  font-size: 0.9em;
+}
+
+.mock__brief dd {
+  color: var(--c-text);
+  font-weight: 500;
+}
+
+/* Página */
+.mock__page {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 4%;
+  height: 100%;
+}
+
+.mock__block {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  transition:
+    opacity 600ms var(--ease-out),
+    transform 700ms var(--ease-out),
+    background-color 600ms var(--ease-out),
+    border-color 600ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+.mock__nav {
+  --d: 0ms;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.6em;
+  padding: 0 1em;
+}
+
+.mock__hero {
+  --d: 90ms;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 5%;
+  padding: 4%;
+}
+
+.mock__cards {
+  --d: 180ms;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3%;
+  padding: 3%;
+}
+
+/* Rótulos do wireframe */
+.mock__block::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -0.75em;
+  left: 0.8em;
+  padding: 0 0.4em;
+  background: #fbfbf9;
+  color: var(--c-green);
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  line-height: 1.4;
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out);
+}
+
+/* Conteúdo interno */
+.mock__logo {
+  color: var(--cafe);
+  font-family: var(--font-display);
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.mock__links {
+  display: flex;
+  gap: 0.8em;
+}
+
+.mock__links i {
+  width: 2.6em;
+  height: 0.45em;
+  border-radius: 1em;
+  background: var(--c-border-strong);
+}
+
+.mock__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.7em;
+}
+
+.mock__copy strong {
+  color: var(--c-text);
+  font-family: var(--font-display);
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.mock__line {
+  width: 90%;
+  height: 0.5em;
+  border-radius: 1em;
+  background: var(--c-border);
+}
+
+.mock__line--short {
+  width: 60%;
+}
+
+.mock__cta {
+  align-self: flex-start;
+  margin-top: 0.3em;
+  padding: 0.5em 0.9em;
+  border-radius: var(--r-pill);
+  background: var(--cafe);
+  color: #fff;
+  font-weight: 600;
+}
+
+.mock__photo {
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--cafe-soft);
+  color: var(--cafe);
+}
+
+.mock__photo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mock__card {
+  display: grid;
+  gap: 0.35em;
+  padding: 0.55em;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+}
+
+.mock__card-img {
+  height: 2.4em;
+  border-radius: var(--r-xs);
+  background: var(--cafe-soft);
+}
+
+.mock__card-title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mock__card-price {
+  color: var(--c-text-2);
+  font-size: 0.85em;
+}
+
+.mock__nav > *,
+.mock__hero > *,
+.mock__cards > * {
+  transition: opacity 600ms var(--ease-out);
+  transition-delay: calc(var(--d, 0ms) + 120ms);
+}
+
+/* Toast de publicação */
+.mock__toast {
+  position: absolute;
+  right: 4%;
+  bottom: 5%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 0.75em 1.1em 0.75em 0.8em;
+  border: 1px solid var(--c-dark-border);
+  border-radius: var(--r-md);
+  background: var(--c-dark);
+  color: var(--c-dark-text);
+  box-shadow: var(--shadow-md);
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 700ms var(--ease-out);
+}
+
+.mock__toast div {
+  display: grid;
+}
+
+.mock__toast strong {
+  font-size: 1.05em;
+}
+
+.mock__toast .mono {
+  color: var(--c-dark-text-2);
+  font-size: 0.82em;
+}
+
+.mock__toast-icon {
+  display: grid;
+  place-items: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  background: var(--c-mint);
+  color: var(--c-dark);
+}
+
+/* ---------- Estados ---------- */
+
+/* 1. Briefing: só a nota; a página ainda não existe */
+.mock[data-stage="briefing"] .mock__block {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* 2. Estrutura: blocos tracejados, sem conteúdo */
+.mock[data-stage="estrutura"] .mock__block {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--c-green) 55%, transparent);
+  background: rgb(56 211 133 / 0.08);
+}
+
+.mock[data-stage="estrutura"] .mock__block::before {
+  opacity: 1;
+}
+
+.mock[data-stage="estrutura"] .mock__block > *,
+.mock[data-stage="briefing"] .mock__block > * {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+
+/* Nota sai de cena depois do briefing */
+.mock:not([data-stage="briefing"]) .mock__brief {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.96);
+  pointer-events: none;
+}
+
+/* 3–4. Conteúdo e publicado: blocos sólidos */
+.mock[data-stage="conteudo"] .mock__nav,
+.mock[data-stage="publicado"] .mock__nav,
+.mock[data-stage="conteudo"] .mock__hero,
+.mock[data-stage="publicado"] .mock__hero {
+  border-color: var(--c-border);
+  background: var(--c-surface);
+}
+
+.mock[data-stage="conteudo"] .mock__cards,
+.mock[data-stage="publicado"] .mock__cards {
+  background: transparent;
+}
+
+.mock:not([data-stage="publicado"]) .mock__toast {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.hero-demo__caption {
+  color: var(--c-text-2);
+  font-size: 0.6875rem;
+  text-align: center;
+}

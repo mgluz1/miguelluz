@@ -1,0 +1,22 @@
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-7);
+  margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+}
+
+.section-header__main {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 720px;
+}
+
+.section-header__main .h2 {
+  margin-top: var(--space-1);
+}
+
+.section-header__aside {
+  flex: none;
+}

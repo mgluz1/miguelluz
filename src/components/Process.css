@@ -1,0 +1,164 @@
+/* Painel menta — o mesmo preenchimento do ícone MGLabs */
+.process {
+  position: relative;
+  overflow: hidden;
+  border-block: 1px solid color-mix(in srgb, var(--c-brand) 30%, transparent);
+  background: var(--c-mint-soft);
+}
+
+.process::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(10 122 73 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(10 122 73 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  pointer-events: none;
+}
+
+.process .container {
+  position: relative;
+}
+
+.process__track {
+  position: relative;
+}
+
+.process__steps {
+  position: relative;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.process__line {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.process__line path {
+  fill: none;
+  stroke: var(--c-brand);
+  stroke-width: 2;
+}
+
+.process__line--h {
+  display: none;
+}
+
+/* Celular: linha vertical à esquerda dos cartões */
+.process__line--v {
+  top: 12px;
+  bottom: 12px;
+  left: 11px;
+  width: 2px;
+  height: calc(100% - 24px);
+}
+
+.process__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: var(--space-4);
+}
+
+/* Nó = mini ícone da marca */
+.process__node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 14px;
+  border: 2px solid var(--c-brand);
+  border-radius: 7px;
+  background: var(--c-surface);
+}
+
+.process__node span {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--c-brand-ink);
+}
+
+.process__card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--c-brand) 28%, transparent);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: 0 10px 30px -18px rgb(2 65 45 / 0.35);
+  transition:
+    border-color var(--dur-ui) var(--ease-out),
+    transform var(--dur-ui) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .process__card:hover {
+    border-color: var(--c-brand);
+    transform: translateY(-3px);
+  }
+}
+
+.process__card-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.process__n {
+  color: var(--c-green);
+  font-weight: 600;
+}
+
+.process__file {
+  color: var(--c-text-2);
+  white-space: nowrap;
+}
+
+.process__title {
+  font-size: 1.5rem;
+  color: var(--c-text);
+}
+
+.process__card p {
+  color: var(--c-text-2);
+  font-size: 0.9375rem;
+}
+
+/* Desktop: quatro colunas com a linha horizontal passando pelos nós */
+@media (min-width: 960px) {
+  .process__steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .process__line--v {
+    display: none;
+  }
+
+  .process__line--h {
+    display: block;
+    top: 11px;
+    left: 12px;
+    /* do primeiro ao último nó: 3 colunas + 3 vãos (gap = 1.5rem) */
+    width: calc(75% + 1.125rem);
+    height: 2px;
+  }
+
+  .process__step {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .process__node {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,122 @@
+.stepper-wrap {
+  --step-line: var(--c-border-strong);
+  --step-fill: var(--c-brand);
+  --step-dot-bg: var(--c-bg);
+  --step-current: var(--c-mint-soft);
+  --step-text: var(--c-text-2);
+  --step-text-active: var(--c-text);
+  --step-btn-bg: var(--c-surface);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.on-dark .stepper-wrap {
+  --step-line: var(--c-dark-border);
+  --step-fill: var(--c-mint);
+  --step-dot-bg: var(--c-dark-2);
+  --step-current: var(--c-dark);
+  --step-text: var(--c-dark-text-2);
+  --step-text-active: var(--c-dark-text);
+  --step-btn-bg: var(--c-dark-2);
+}
+
+.stepper {
+  --progress: 1;
+  --count: 4;
+  position: relative;
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(var(--count), 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Linha de conexão: trilho + preenchimento proporcional à etapa atual */
+.stepper::before,
+.stepper::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: calc(50% / var(--count));
+  width: calc(100% - 100% / var(--count));
+  height: 1px;
+  background: var(--step-line);
+}
+
+.stepper::after {
+  top: 14.5px;
+  height: 2px;
+  background: var(--step-fill);
+  transform: scaleX(var(--progress));
+  transform-origin: left;
+  transition: transform 700ms var(--ease-out);
+}
+
+.stepper button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 2px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  cursor: pointer;
+}
+
+/* Ponto da etapa no formato do ícone da marca */
+.stepper__dot {
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--step-line);
+  border-radius: 4px;
+  background: var(--step-dot-bg);
+  transition:
+    border-color var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out),
+    transform var(--dur-ui) var(--ease-out);
+}
+
+.stepper li.is-done .stepper__dot {
+  border-color: var(--step-fill);
+  background: var(--step-fill);
+}
+
+.stepper button[aria-current="step"] .stepper__dot {
+  border-color: var(--step-fill);
+  background: var(--step-current);
+  transform: scale(1.2);
+}
+
+.stepper__label {
+  color: var(--step-text);
+  font-size: 0.6875rem;
+  text-align: center;
+  transition: color var(--dur-ui) var(--ease-out);
+}
+
+.stepper button[aria-current="step"] .stepper__label,
+.stepper button:hover .stepper__label {
+  color: var(--step-text-active);
+}
+
+.stepper__pause {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--step-line);
+  border-radius: 50%;
+  background: var(--step-btn-bg);
+  cursor: pointer;
+  transition: border-color var(--dur-ui) var(--ease-out);
+}
+
+.stepper__pause:hover {
+  border-color: var(--step-fill);
+}
