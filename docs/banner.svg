@@ -1,44 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="Portfólio — Miguel Luz">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="Miguel Luz — Interfaces bem pensadas. Processos mais simples.">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0f172a"/>
-      <stop offset="0.55" stop-color="#1e1b4b"/>
-      <stop offset="1" stop-color="#312e81"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#38bdf8"/>
-      <stop offset="1" stop-color="#a78bfa"/>
-    </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#0f172a" fill-opacity="0.08"/>
     </pattern>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38d385" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38d385" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="clip"><rect width="1280" height="420" rx="24"/></clipPath>
   </defs>
-  <rect width="1280" height="400" fill="url(#bg)"/>
-  <rect width="1280" height="400" fill="url(#grid)"/>
-  <circle cx="1090" cy="80" r="220" fill="#a78bfa" fill-opacity="0.12"/>
-  <circle cx="1180" cy="330" r="160" fill="#38bdf8" fill-opacity="0.10"/>
 
-  <!-- janela decorativa -->
-  <g transform="translate(790 70)">
-    <rect width="400" height="260" rx="14" fill="#0b1020" stroke="#ffffff" stroke-opacity="0.15"/>
-    <circle cx="26" cy="26" r="6" fill="#f87171"/>
-    <circle cx="48" cy="26" r="6" fill="#fbbf24"/>
-    <circle cx="70" cy="26" r="6" fill="#34d399"/>
-    <g font-family="Consolas, 'Courier New', monospace" font-size="17">
-      <text x="28" y="82" fill="#7dd3fc">&lt;Portfolio</text>
-      <text x="52" y="112" fill="#c4b5fd">stack<tspan fill="#e2e8f0">=</tspan><tspan fill="#86efac">"React 19"</tspan></text>
-      <text x="52" y="142" fill="#c4b5fd">lang<tspan fill="#e2e8f0">=</tspan><tspan fill="#86efac">"TypeScript"</tspan></text>
-      <text x="52" y="172" fill="#c4b5fd">build<tspan fill="#e2e8f0">=</tspan><tspan fill="#86efac">"Vite"</tspan></text>
-      <text x="52" y="202" fill="#c4b5fd">prerender<tspan fill="#e2e8f0">=</tspan><tspan fill="#fbbf24">{true}</tspan></text>
-      <text x="28" y="232" fill="#7dd3fc">/&gt;</text>
+  <g clip-path="url(#clip)">
+    <rect width="1280" height="420" fill="#f8f7f4"/>
+    <rect width="1280" height="420" fill="url(#dots)"/>
+
+    <!-- painel escuro -->
+    <path d="M760 0H1280V420H700Z" fill="#070d14"/>
+    <circle cx="1230" cy="40" r="200" fill="url(#glow)"/>
+
+    <!-- janela de código -->
+    <g transform="translate(800 78)">
+      <rect width="400" height="264" rx="14" fill="#0e1620" stroke="#233140"/>
+      <path d="M0 14a14 14 0 0 1 14-14h372a14 14 0 0 1 14 14V46H0Z" fill="#15202c"/>
+      <circle cx="26" cy="23" r="6" fill="#233140"/>
+      <circle cx="48" cy="23" r="6" fill="#233140"/>
+      <circle cx="70" cy="23" r="6" fill="#38d385"/>
+      <text x="200" y="28" font-family="Consolas, 'Courier New', monospace" font-size="13" fill="#9fb0c0" text-anchor="middle">deploy · netlify</text>
+      <g font-family="Consolas, 'Courier New', monospace" font-size="17">
+        <text x="28" y="92" fill="#9fb0c0">1  Entender</text>
+        <text x="28" y="128" fill="#9fb0c0">2  Estruturar</text>
+        <text x="28" y="164" fill="#9fb0c0">3  Construir</text>
+        <text x="28" y="200" fill="#38d385">4  Publicar e acompanhar</text>
+        <text x="28" y="236" fill="#e8eef3">$ npm run build<tspan fill="#38d385">▌</tspan></text>
+      </g>
     </g>
-  </g>
 
-  <g font-family="'Segoe UI', Helvetica, Arial, sans-serif">
-    <text x="80" y="150" font-size="22" letter-spacing="6" fill="#94a3b8">PORTFÓLIO</text>
-    <text x="80" y="230" font-size="76" font-weight="700" fill="#f8fafc">Miguel Luz</text>
-    <rect x="80" y="255" width="140" height="6" rx="3" fill="url(#accent)"/>
-    <text x="80" y="305" font-size="24" fill="#cbd5e1">Sites rápidos, acessíveis e bem feitos.</text>
-    <text x="80" y="340" font-size="18" fill="#94a3b8">React · TypeScript · Vite · CSS nativo</text>
+    <!-- marca MGLabs -->
+    <g transform="translate(72 64)">
+      <rect x="2" y="2" width="68" height="68" rx="18" fill="#ddf8ea" stroke="#38d385" stroke-width="4"/>
+      <g fill="none" stroke="#02412d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M27 27 15 36l12 9"/>
+        <path d="M45 27l12 9-12 9"/>
+        <path d="M40 22 32 50"/>
+      </g>
+      <text x="88" y="48" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#0f172a" letter-spacing="-0.5">mglabs<tspan fill="#38d385">.</tspan></text>
+    </g>
+
+    <!-- texto -->
+    <text x="72" y="190" font-family="Consolas, 'Courier New', monospace" font-size="14" letter-spacing="2.5" fill="#0a7a49">DESENVOLVIMENTO FRONT-END · AUTOMAÇÃO</text>
+    <text x="72" y="262" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="80" font-weight="600" fill="#0f172a" letter-spacing="-2">Miguel Luz</text>
+    <text x="72" y="312" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="25" fill="#5b6577">Interfaces bem pensadas. Processos mais simples.</text>
+    <g font-family="Consolas, 'Courier New', monospace" font-size="14" fill="#08683e">
+      <rect x="72" y="342" width="86" height="32" rx="16" fill="#ddf8ea" stroke="#bccac2"/><text x="115" y="363" text-anchor="middle">React</text>
+      <rect x="168" y="342" width="116" height="32" rx="16" fill="#ddf8ea" stroke="#bccac2"/><text x="226" y="363" text-anchor="middle">TypeScript</text>
+      <rect x="294" y="342" width="76" height="32" rx="16" fill="#ddf8ea" stroke="#bccac2"/><text x="332" y="363" text-anchor="middle">Vite</text>
+    </g>
   </g>
 </svg>
