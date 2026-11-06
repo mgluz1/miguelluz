@@ -43,8 +43,9 @@ Na Netlify: comando `npm run build`, pasta de publicação `dist`.
 <summary><strong>Guias rápidos</strong></summary>
 
 ### Currículo
-Coloque o PDF em `public/` e troque `resumeUrl = null` por `"/nome-do-arquivo.pdf"` em `src/content/site.ts`.
-Enquanto for `null`, os botões oferecem "solicitar por e-mail".
+A página `/curriculo/` (`curriculo/index.html`) segue a estrutura do PDF e o texto vem de `src/content/resume.ts`.
+O PDF para download fica em `public/curriculo-miguel-luz.pdf` (`resumeUrl` em `src/content/site.ts`).
+Ao atualizar o currículo, troque o PDF **e** edite `resume.ts`. A página também imprime bem (Ctrl/Cmd + P).
 
 ### Novo projeto com screenshots
 1. Coloque as imagens originais em `images-src/`.
@@ -68,6 +69,7 @@ src/
     hero/         Hero + HeroDemo (briefing → estrutura → conteúdo → publicado)
     projects/     ProjectCase, MonitorCase + PublicationsDemo, Projects
     experience/   Experience + ContractsDemo
+    resume/       ResumePage (página /curriculo/)
     Nav, Process, Skills, About, Contact
 scripts/          optimize-images.mjs, prerender.mjs
 images-src/       originais grandes (fora do build)

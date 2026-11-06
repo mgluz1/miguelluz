@@ -17,17 +17,14 @@ export const links = {
   mglabs: "https://mglabss.netlify.app/",
 };
 
-/**
- * Currículo em PDF.
- * Quando o arquivo existir, coloque-o em `public/` (ex.: public/curriculo-miguel-luz.pdf)
- * e troque `null` pelo caminho: "/curriculo-miguel-luz.pdf".
- * Enquanto for `null`, a página oferece "Solicitar currículo" por e-mail — nunca um link quebrado.
- */
-export const resumeUrl: string | null = null;
+/** Página do currículo (curriculo/index.html + src/content/resume.ts). */
+export const resumePagePath = "/curriculo/";
 
-export const resumeRequestHref = `mailto:${profile.email}?subject=${encodeURIComponent(
-  "Solicitação de currículo — Miguel Luz",
-)}`;
+/**
+ * Currículo em PDF, em `public/`. Ao trocar o arquivo, atualize também src/content/resume.ts.
+ * Se for `null`, a página do currículo simplesmente não mostra o botão de download.
+ */
+export const resumeUrl: string | null = "/curriculo-miguel-luz.pdf";
 
 export const navItems = [
   { id: "projetos", label: "Projetos" },

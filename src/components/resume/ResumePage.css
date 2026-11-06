@@ -1,0 +1,303 @@
+/* Página do currículo: folha de papel com a hierarquia do PDF (nome centrado, títulos serifados com filete). */
+
+.cv-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  border-bottom: 1px solid var(--c-border);
+  background: color-mix(in srgb, var(--c-bg) 94%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+}
+
+.cv-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 100%;
+}
+
+.cv-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.cv-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.cv-bar__back {
+  padding: 8px 4px;
+  color: var(--c-text-2);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cv-bar__back:hover {
+  color: var(--c-text);
+}
+
+.cv-bar__download {
+  min-height: 42px;
+}
+
+.cv-wrap {
+  padding-block: clamp(1.5rem, 1rem + 3vw, 3.5rem) clamp(3rem, 2rem + 5vw, 6rem);
+}
+
+.cv {
+  width: min(100% - 2 * var(--gutter), 56rem);
+  margin-inline: auto;
+  padding: clamp(1.5rem, 1rem + 4vw, 3.5rem) clamp(1.25rem, 0.5rem + 5vw, 3.75rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-demo);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.cv__head {
+  text-align: center;
+}
+
+.cv__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-heading);
+}
+
+.cv__contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-2);
+  margin-top: var(--space-2);
+  color: var(--c-text-2);
+  font-size: 0.8125rem;
+}
+
+/* Separador "•" entre os itens de contato, como no PDF */
+.cv__contact > * + *::before {
+  content: "•";
+  margin-right: var(--space-2);
+  color: var(--c-border-strong);
+}
+
+.cv__link {
+  text-decoration-color: var(--c-border-strong);
+  text-underline-offset: 3px;
+}
+
+.cv__link:hover {
+  color: var(--c-green);
+  text-decoration-color: currentColor;
+}
+
+/* Link de projeto dentro do título: sem sublinhado até o hover, e sem o "•" */
+.cv__link--plain {
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.cv__link--plain:hover {
+  text-decoration: underline;
+}
+
+.cv__contact > .cv__link--plain::before {
+  content: none;
+}
+
+/* ---------- Seções ---------- */
+
+.cv__section {
+  margin-top: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+}
+
+.cv__h2 {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--c-text);
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.cv__section > :not(.cv__h2):first-of-type {
+  margin-top: var(--space-3);
+}
+
+.cv__text {
+  margin-top: var(--space-3);
+  text-wrap: pretty;
+}
+
+.cv__subjects {
+  margin-top: var(--space-1);
+}
+
+/* ---------- Linhas título ↔ local/período ---------- */
+
+.cv__row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: var(--space-5);
+}
+
+.cv__row-left {
+  min-width: 0;
+}
+
+.cv__row-title {
+  font-weight: 700;
+}
+
+.cv__row-sub {
+  font-style: italic;
+}
+
+.cv__row-right {
+  flex: none;
+  margin-left: auto;
+  text-align: right;
+}
+
+.cv__tech-inline {
+  font-style: italic;
+  font-size: var(--fs-small);
+  color: var(--c-text-2);
+}
+
+.cv__entry {
+  margin-top: var(--space-4);
+}
+
+.cv__section > .cv__entry:first-of-type {
+  margin-top: var(--space-3);
+}
+
+.cv__entry .cv__list {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Listas ---------- */
+
+.cv__list {
+  display: grid;
+  gap: 2px;
+  padding: 0;
+  margin: var(--space-3) 0 0;
+  list-style: none;
+}
+
+.cv__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  text-wrap: pretty;
+}
+
+.cv__list li::before {
+  content: "•";
+  position: absolute;
+  left: 0.15rem;
+  color: var(--c-text);
+}
+
+.cv__list--dash li::before {
+  content: "–";
+}
+
+/* ---------- Telas pequenas ---------- */
+
+@media (max-width: 599px) {
+  .cv-bar__brand span {
+    display: none;
+  }
+
+  .cv__row {
+    flex-wrap: wrap;
+  }
+
+  .cv__row-right {
+    flex-basis: 100%;
+    margin-left: 0;
+    text-align: left;
+    color: var(--c-text-2);
+    font-size: var(--fs-small);
+  }
+
+  .cv__row-right p {
+    display: inline;
+  }
+
+  .cv__row-right p + p::before {
+    content: " · ";
+  }
+
+  .cv__contact {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cv__contact > * + *::before {
+    content: none;
+  }
+}
+
+/* ---------- Impressão: só a folha, em preto e branco ---------- */
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .cv-bar,
+  .skip-link {
+    display: none !important;
+  }
+
+  .cv-wrap {
+    padding: 0;
+  }
+
+  .cv {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 10pt;
+  }
+
+  .cv__link,
+  .cv__contact,
+  .cv__tech-inline {
+    color: inherit;
+  }
+
+  .cv__section,
+  .cv__entry {
+    break-inside: avoid-page;
+  }
+}

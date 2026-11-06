@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { navItems, profile, resumeRequestHref, resumeUrl } from "../content/site";
+import { navItems, profile, resumePagePath } from "../content/site";
 import { useActiveSection } from "../hooks/useActiveSection";
 import { BrandMark } from "./ui/BrandMark";
 import { Icon } from "./ui/Icon";
@@ -32,10 +32,6 @@ export function Nav() {
       mql.removeEventListener("change", onChange);
     };
   }, [open]);
-
-  const resume = resumeUrl
-    ? { href: resumeUrl, label: "Currículo", note: "PDF", download: true }
-    : { href: resumeRequestHref, label: "Currículo", note: "por e-mail", download: false };
 
   return (
     <header className={`nav ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
@@ -73,15 +69,10 @@ export function Nav() {
               </li>
             ))}
           </ul>
-          <a
-            className="nav__resume"
-            href={resume.href}
-            {...(resume.download ? { download: true } : {})}
-            onClick={() => setOpen(false)}
-          >
+          <a className="nav__resume" href={resumePagePath} onClick={() => setOpen(false)}>
             <Icon name="file" size={16} />
-            {resume.label}
-            <span className="nav__resume-note mono">{resume.note}</span>
+            Currículo
+            <span className="nav__resume-note mono">ver página</span>
           </a>
         </nav>
       </div>

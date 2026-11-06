@@ -1,19 +1,17 @@
 import { useState, type CSSProperties } from "react";
-import { links, profile, resumeRequestHref, resumeUrl } from "../content/site";
+import { links, profile, resumePagePath } from "../content/site";
 import { BrandMark } from "./ui/BrandMark";
 import { Icon, type IconName } from "./ui/Icon";
 import { Words } from "./ui/Words";
 import "./Contact.css";
 
-type ContactLink = { label: string; detail: string; href: string; icon: IconName; external?: boolean; download?: boolean };
+type ContactLink = { label: string; detail: string; href: string; icon: IconName; external?: boolean };
 
 const contactLinks: ContactLink[] = [
   { label: "LinkedIn", detail: "in/miguelluz19", href: links.linkedin, icon: "linkedin", external: true },
   { label: "GitHub", detail: "mgluz1", href: links.github, icon: "github", external: true },
   { label: "MGLabs", detail: "mglabss.netlify.app", href: links.mglabs, icon: "globe", external: true },
-  resumeUrl
-    ? { label: "Currículo", detail: "PDF", href: resumeUrl, icon: "file", download: true }
-    : { label: "Currículo", detail: "solicitar por e-mail", href: resumeRequestHref, icon: "file" },
+  { label: "Currículo", detail: "ver página · PDF", href: resumePagePath, icon: "file" },
 ];
 
 export function Contact() {
@@ -62,7 +60,6 @@ export function Contact() {
               <a
                 href={l.href}
                 {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                {...(l.download ? { download: true } : {})}
               >
                 {l.label === "MGLabs" ? <BrandMark size={22} className="contact__mark" /> : <Icon name={l.icon} size={20} />}
                 <span className="contact__link-label">{l.label}</span>

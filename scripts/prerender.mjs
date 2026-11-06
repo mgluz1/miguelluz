@@ -1,7 +1,8 @@
 /**
- * Pré-renderiza a página: injeta o HTML do React em dist/index.html.
+ * Pré-renderiza as páginas: injeta o HTML do React em dist/index.html (portfólio)
+ * e dist/curriculo/index.html (currículo).
  * Assim o conteúdo aparece mesmo sem JavaScript e é indexável;
- * no navegador, main.tsx apenas hidrata esse HTML.
+ * no navegador, main.tsx / curriculo-main.tsx apenas hidratam esse HTML.
  */
 import { readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -11,13 +12,18 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const SSR_DIR = path.join(ROOT, "dist-ssr");
 
-const { render } = await import(pathToFileURL(path.join(SSR_DIR, "entry-server.js")).href);
-const html = render();
+const { render, renderResume } = await import(pathToFileURL(path.join(SSR_DIR, "entry-server.js")).href);
 
-const indexPath = path.join(DIST, "index.html");
-const template = await readFile(indexPath, "utf8");
-if (!template.includes('<div id="root"></div>')) throw new Error("Marcador #root não encontrado.");
+const pages = [
+  { file: path.join(DIST, "index.html"), html: render() },
+  { file: path.join(DIST, "curriculo", "index.html"), html: renderResume() },
+];
 
-await writeFile(indexPath, template.replace('<div id="root"></div>', `<div id="root">${html}</div>`));
+for (const { file, html } of pages) {
+  const template = await readFile(file, "utf8");
+  if (!template.includes('<div id="root"></div>')) throw new Error(`Marcador #root não encontrado em ${file}.`);
+  await writeFile(file, template.replace('<div id="root"></div>', `<div id="root">${html}</div>`));
+  console.log(`✓ Pré-renderizado ${path.relative(ROOT, file)}: ${(html.length / 1024).toFixed(1)} KB de HTML`);
+}
+
 await rm(SSR_DIR, { recursive: true, force: true });
-console.log(`✓ Pré-renderizado: ${(html.length / 1024).toFixed(1)} KB de HTML`);
