@@ -36,58 +36,6 @@
   gap: var(--space-5);
 }
 
-.hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  color: var(--c-text-2);
-  font-size: var(--fs-small);
-}
-
-.hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 4px 12px 4px 4px;
-  border: 1px solid var(--c-border);
-  border-radius: var(--r-pill);
-  background: var(--c-surface);
-  box-shadow: var(--shadow-sm);
-}
-
-.hero__badge .brand-mark {
-  border-radius: 6px;
-}
-
-.hero__name {
-  color: var(--c-text);
-  font-weight: 600;
-}
-
-.hero__badge-sep {
-  width: 1px;
-  height: 14px;
-  background: var(--c-border-strong);
-}
-
-.hero__badge-role {
-  color: var(--c-text-2);
-}
-
-.hero__sep {
-  width: 24px;
-  height: 1px;
-  background: var(--c-border-strong);
-}
-
-.hero__location {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--c-green);
-}
-
 .hero__title {
   font-size: var(--fs-h1);
   line-height: var(--lh-tight);
@@ -135,11 +83,5 @@
 @media (max-width: 420px) {
   .hero__actions .btn {
     flex: 1 1 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero__sep {
-    display: none;
   }
 }

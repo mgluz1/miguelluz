@@ -1,15 +1,9 @@
 import type { CSSProperties } from "react";
-import { monitorProject as p, type FeatureState } from "../../content/projects";
+import { monitorProject as p } from "../../content/projects";
 import { PublicationsDemo } from "./PublicationsDemo";
 import "./MonitorCase.css";
 
-const STATE_LABEL: Record<FeatureState, string> = {
-  planejado: "Planejado",
-  implementado: "Implementado",
-  validado: "Validado",
-};
-
-/** Projeto em desenvolvimento — card claro, com status por funcionalidade. */
+/** Controller — card claro com o contexto, o que o sistema faz e uma ilustração do fluxo. */
 export function MonitorCase() {
   const titleId = `projeto-${p.id}`;
 
@@ -39,33 +33,23 @@ export function MonitorCase() {
             <dd>{p.context}</dd>
           </div>
           <div>
-            <dt className="mono">Proposta</dt>
-            <dd>{p.proposal}</dd>
+            <dt className="mono">Solução</dt>
+            <dd>{p.solution}</dd>
           </div>
         </dl>
 
         <div className="reveal" style={{ "--i": 3 } as CSSProperties}>
-          <h4 className="mono monitor__label">Funcionalidades</h4>
+          <h4 className="mono monitor__label">O que faz</h4>
           <ul className="monitor__features" role="list">
             {p.features.map((f) => (
-              <li key={f.label}>
-                <span>{f.label}</span>
-                <span className={`state state--${f.state} mono`}>{STATE_LABEL[f.state]}</span>
-              </li>
+              <li key={f}>{f}</li>
             ))}
           </ul>
-          <p className="monitor__legend mono">
-            Legenda: <span className="state state--planejado">planejado</span>
-            <span className="state state--implementado">implementado</span>
-            <span className="state state--validado">validado</span>
-          </p>
         </div>
 
-        <p className="monitor__caveat reveal">{p.caveat}</p>
+        <p className="monitor__note reveal">{p.goal}</p>
 
-        <p className="monitor__stack mono reveal">
-          Tecnologias: {p.stack.length ? p.stack.join(" · ") : "em definição"}
-        </p>
+        <p className="monitor__stack mono reveal">Tecnologias: {p.stack.join(" · ")}</p>
       </div>
 
       <div className="monitor__demo reveal" style={{ "--i": 2 } as CSSProperties}>

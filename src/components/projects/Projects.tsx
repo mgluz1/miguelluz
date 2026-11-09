@@ -4,6 +4,7 @@ import { SectionHeader } from "../ui/SectionHeader";
 import { TagList } from "../ui/Tag";
 import { MonitorCase } from "./MonitorCase";
 import { ProjectCase } from "./ProjectCase";
+import { SalvaehCase } from "./SalvaehCase";
 import "./Projects.css";
 
 export function Projects() {
@@ -14,7 +15,7 @@ export function Projects() {
           id="projetos-title"
           eyebrow="Projetos"
           title={["Sites para negócios reais,", { em: "do briefing ao ar." }]}
-          lead="Dois sites publicados para clientes, uma automação em construção e a iniciativa pela qual desenvolvo. Para cada um: o contexto, o que fiz e as decisões técnicas que importaram."
+          lead="Dois sites publicados para clientes, um sistema de automação, um app próprio e a iniciativa pela qual desenvolvo. Para cada um: o contexto, o que fiz e as decisões técnicas que importaram."
         />
 
         {featuredProjects.map((project) => (
@@ -22,6 +23,8 @@ export function Projects() {
         ))}
 
         <MonitorCase />
+
+        <SalvaehCase />
 
         <aside className="mglabs reveal" aria-labelledby="mglabs-title">
           <img className="mglabs__mark" src="/mark-mglabs.png" width={56} height={56} alt="" />

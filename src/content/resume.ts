@@ -144,11 +144,11 @@ export const resumeProjects: Entry[] = [
     ],
   },
   {
-    title: "Monitoramento de Publicações Processuais – DJEN/CNJ",
+    title: "Controller – Monitoramento de Publicações Judiciais (DJEN/CNJ)",
     tech: "Node.js, SQLite, APIs",
     bullets: [
       {
-        text: "Desenvolvimento de solução para consultar e acompanhar publicações processuais via ComunicaAPI/CNJ, com armazenamento histórico, deduplicação e organização de informações para revisão.",
+        text: "Sistema personalizado para a Moraes Luz Advocacia que coleta publicações pela API do DJEN/CNJ e as reúne em um painel, com armazenamento histórico, deduplicação, busca, filtros por advogado e tribunal, registro de providências e acompanhamento do status de revisão.",
       },
     ],
   },

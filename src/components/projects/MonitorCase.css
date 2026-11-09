@@ -54,27 +54,15 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #7a5e14;
+  color: var(--c-green);
 }
 
 .monitor__status i {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--c-state-progress);
-  box-shadow: 0 0 0 3px rgb(201 161 59 / 0.2);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .monitor__status i {
-    animation: pulse 2.4s var(--ease-out) infinite;
-  }
-}
-
-@keyframes pulse {
-  50% {
-    box-shadow: 0 0 0 6px rgb(201 161 59 / 0);
-  }
+  background: var(--c-state-done);
+  box-shadow: 0 0 0 3px rgb(47 158 106 / 0.2);
 }
 
 .monitor__facts {
@@ -115,57 +103,11 @@
   font-size: 0.9375rem;
 }
 
-.state {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.6875rem;
-  color: var(--c-dark-text-2);
-}
-
-.state::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-}
-
-.state--planejado {
-  color: var(--c-text-2);
-}
-
-.state--implementado {
-  color: #8a6410;
-}
-
-.state--implementado::before {
-  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
-}
-
-.state--validado {
-  color: var(--c-green);
-}
-
-.state--validado::before {
-  background: currentColor;
-}
-
-.monitor__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  margin-top: var(--space-3);
-  color: var(--c-dark-text-2);
-  font-size: 0.6875rem;
-}
-
-.monitor__caveat {
+.monitor__note {
   padding: var(--space-3) var(--space-4);
-  border-left: 2px solid var(--c-state-progress);
+  border-left: 2px solid var(--c-brand);
   border-radius: 0 var(--r-sm) var(--r-sm) 0;
-  background: rgb(201 161 59 / 0.1);
+  background: var(--c-mint-soft);
   color: var(--c-text);
   font-size: 0.875rem;
 }

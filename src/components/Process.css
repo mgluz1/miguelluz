@@ -22,6 +22,30 @@
   position: relative;
 }
 
+/* Arqueiro: ilustração decorativa ao lado do título */
+.process__art {
+  width: clamp(190px, 60vw, 230px);
+  margin-inline: auto;
+}
+
+@media (min-width: 960px) {
+  .process .section-header {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  /* À esquerda, para que a flecha aponte para o título */
+  .process .section-header__aside {
+    order: -1;
+  }
+
+  .process__art {
+    width: clamp(250px, 24vw, 300px);
+    margin-inline: 0;
+  }
+}
+
 .process__track {
   position: relative;
 }

@@ -1,8 +1,6 @@
 import type { CSSProperties } from "react";
-import { hero, profile } from "../../content/site";
+import { hero } from "../../content/site";
 import { ButtonLink } from "../ui/Button";
-import { BrandMark } from "../ui/BrandMark";
-import { Icon } from "../ui/Icon";
 import { Words } from "../ui/Words";
 import { HeroDemo } from "./HeroDemo";
 import "./Hero.css";
@@ -12,18 +10,6 @@ export function Hero() {
     <section id="topo" className="hero" aria-labelledby="hero-title">
       <div className="hero__inner container">
         <div className="hero__copy">
-          <p className="hero__meta reveal">
-            <span className="hero__badge">
-              <BrandMark size={22} />
-              <span className="hero__name">{profile.name}</span>
-            </span>
-            <span className="hero__sep" aria-hidden="true" />
-            <span className="mono hero__location">
-              <Icon name="pin" size={13} />
-              {profile.location}
-            </span>
-          </p>
-
           <Words
             as="h1"
             id="hero-title"

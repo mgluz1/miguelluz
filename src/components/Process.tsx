@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { processSteps } from "../content/site";
+import { ResponsiveImage } from "./ui/ResponsiveImage";
 import { SectionHeader } from "./ui/SectionHeader";
 import "./Process.css";
 
@@ -16,6 +17,16 @@ export function Process() {
           eyebrow="Processo"
           title={["Como transformo uma necessidade", { em: "em algo que funciona." }]}
           lead="Sites e automações seguem o mesmo raciocínio: entender a rotina, organizar o que importa, construir com cuidado e acompanhar depois de entregar."
+          aside={
+            // Ilustração decorativa: o arqueiro mira o texto, como o processo mira o que importa
+            <div className="process__art" aria-hidden="true">
+              <ResponsiveImage
+                name="arqueiro"
+                alt=""
+                sizes="(min-width: 960px) 300px, 220px"
+              />
+            </div>
+          }
         />
 
         <div className="process__track draw-group">

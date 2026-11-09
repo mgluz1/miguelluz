@@ -61,5 +61,22 @@
       560,
       900
     ]
+  },
+  "salvaeh-icon": {
+    "width": 224,
+    "height": 224,
+    "widths": [
+      112,
+      224
+    ]
+  },
+  "arqueiro": {
+    "width": 720,
+    "height": 957,
+    "widths": [
+      360,
+      540,
+      720
+    ]
   }
 }

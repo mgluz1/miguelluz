@@ -35,7 +35,7 @@ Na Netlify: comando `npm run build`, pasta de publicação `dist`.
 | O quê | Arquivo |
 | --- | --- |
 | Nome, links, hero, etapas do processo, currículo | `src/content/site.ts` |
-| Projetos (HM2, Moraes Luz, monitoramento, MGLabs) | `src/content/projects.ts` |
+| Projetos (HM2, Moraes Luz, Controller, salvaeh, MGLabs) | `src/content/projects.ts` |
 | Experiência, conhecimentos, formação | `src/content/experience.ts` |
 | Cores, fontes, espaçamentos, curvas de animação | `src/styles/tokens.css` |
 
@@ -52,8 +52,8 @@ Ao atualizar o currículo, troque o PDF **e** edite `resume.ts`. A página tamb�
 2. Registre-as em `SOURCES` dentro de `scripts/optimize-images.mjs` e rode `npm run images`.
 3. Adicione um objeto em `featuredProjects` (`src/content/projects.ts`) usando os nomes registrados.
 
-### Status do projeto de monitoramento
-Em `monitorProject.features`, troque `state` entre `"planejado"`, `"implementado"` e `"validado"`.
+### Controller (monitoramento de publicações)
+Textos e lista de funcionalidades em `monitorProject` (`src/content/projects.ts`). A tabela ao lado é só uma ilustração do fluxo, em `PublicationsDemo.tsx`, com dados fictícios.
 
 </details>
 

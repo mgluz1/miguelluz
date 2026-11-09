@@ -115,34 +115,31 @@ export const featuredProjects: Project[] = [
   },
 ];
 
-/** Estados usados no projeto em desenvolvimento. */
-export type FeatureState = "planejado" | "implementado" | "validado";
-
 /**
- * Monitoramento de Publicações Processuais.
- * Atualize `state` de cada funcionalidade conforme o projeto avançar.
+ * Controller — sistema de monitoramento de publicações judiciais (DJEN).
+ * Texto baseado no relato do próprio projeto; sem métricas inventadas.
  */
 export const monitorProject = {
-  id: "monitor",
+  id: "controller",
   index: "03",
-  name: "Monitoramento de Publicações Processuais",
+  name: "Controller",
   segment: "Automação para advocacia",
-  status: "Em desenvolvimento",
+  status: "Concluído",
   context:
-    "Escritórios acompanham publicações do PJe manualmente, conferindo cada OAB, repetições e prazos. É uma rotina demorada e sensível a esquecimentos.",
-  proposal:
-    "Automação que consulta publicações por OAB, remove duplicatas, organiza prazos e classifica a urgência em uma planilha ou painel.",
-  caveat:
-    "Projeto em construção. A demonstração ao lado é um protótipo de interface com dados fictícios; o cálculo de prazos ainda não foi validado e não deve ser tratado como produto concluído.",
+    "Acompanhar publicações processuais é uma tarefa repetitiva, trabalhosa e que exige muita atenção. A Moraes Luz Advocacia e Assessoria Jurídica precisava reunir esse acompanhamento em um só lugar.",
+  solution:
+    "Sistema personalizado para o escritório que usa a API do Diário de Justiça Eletrônico Nacional (DJEN) para coletar as publicações automaticamente e centralizar tudo em um único painel.",
   features: [
-    { label: "Consulta de publicações do PJe por OAB", state: "planejado" },
-    { label: "Remoção de publicações duplicadas", state: "planejado" },
-    { label: "Organização de prazos", state: "planejado" },
-    { label: "Classificação de urgência", state: "planejado" },
-    { label: "Saída em planilha ou painel", state: "planejado" },
-  ] satisfies { label: string; state: FeatureState }[],
-  /** Preencha quando a stack estiver definida; vazio exibe "em definição". */
-  stack: [] as string[],
+    "Coleta automática pela API do DJEN",
+    "Consulta e busca de publicações",
+    "Filtro por advogado e tribunal",
+    "Registro de providências",
+    "Status de revisão de cada publicação",
+    "Armazenamento histórico sem duplicatas",
+  ],
+  goal:
+    "Mais do que escrever código, o objetivo foi usar a tecnologia para simplificar processos e reduzir o trabalho manual.",
+  stack: ["Node.js", "SQLite", "API do DJEN (CNJ)"],
 };
 
 export const mglabsProject = {
@@ -152,4 +149,23 @@ export const mglabsProject = {
   urlLabel: "mglabss.netlify.app",
   text:
     "Minha iniciativa de desenvolvimento freelancer. A página funciona como projeto próprio de posicionamento: apresenta os serviços, o processo de trabalho e os sites que entreguei — HM2 Aviation e Moraes Luz entre eles.",
+};
+
+/** App próprio — texto baseado no que o site publicado afirma; sem números de uso. */
+export const salvaehProject = {
+  name: "salvaeh",
+  segment: "Produto próprio · app",
+  status: "No ar",
+  url: "https://salvaeh.vercel.app/",
+  urlLabel: "salvaeh.vercel.app",
+  text:
+    "App para guardar links e notas e encontrar tudo depois. Você cola um link, ou compartilha direto do Instagram e do TikTok, e o salvaeh busca título e capa e separa por tipo. O Salve AI responde perguntas com base no que foi salvo. Funciona no site, no iPhone e no Android.",
+  types: [
+    { label: "Receitas", color: "#fe6701" },
+    { label: "Lugares", color: "#01b6a5" },
+    { label: "Livros", color: "#9351fb" },
+    { label: "Tutoriais", color: "#fd298e" },
+    { label: "Software", color: "#1985fd" },
+  ],
+  stack: ["Next.js", "Vercel", "Salve AI"],
 };

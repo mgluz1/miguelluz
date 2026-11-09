@@ -1,24 +1,15 @@
-import { useRef, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { education } from "../content/experience";
-import { useFinePointer, useReducedMotion } from "../hooks/useMediaQuery";
-import { useTilt } from "../hooks/useTilt";
 import { ResponsiveImage } from "./ui/ResponsiveImage";
 import { SectionHeader } from "./ui/SectionHeader";
 import "./About.css";
 
 export function About() {
-  const frameRef = useRef<HTMLDivElement>(null);
-  const fine = useFinePointer();
-  const reduced = useReducedMotion();
-  // Inclinação e spotlight só com mouse; em telas de toque a foto fica parada
-  useTilt(frameRef, fine && !reduced, 5);
-
   return (
     <section id="sobre" className="section about" aria-labelledby="sobre-title">
       <div className="container about__grid">
-        <figure className="about__photo reveal">
-          <div ref={frameRef} className="about__photo-frame">
-            <span className="about__photo-spot" aria-hidden="true" />
+        <figure className="about__photo">
+          <div className="about__photo-frame">
             <ResponsiveImage
               name="miguel-retrato"
               alt="Retrato de Miguel Luz, de terno azul-marinho e gravata azul, ajustando o punho da camisa."

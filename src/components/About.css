@@ -9,11 +9,6 @@
   .about__grid {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.25fr) minmax(0, 0.9fr);
   }
-
-  .about__photo {
-    position: sticky;
-    top: calc(var(--nav-h) + 32px);
-  }
 }
 
 .about__photo {
@@ -25,11 +20,6 @@
 .about__photo-frame {
   position: relative;
   overflow: hidden;
-  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition:
-    transform 600ms var(--ease-out),
-    box-shadow var(--dur-ui) var(--ease-out),
-    border-color var(--dur-ui) var(--ease-out);
   aspect-ratio: 4 / 5;
   border: 1px solid var(--c-border);
   border-radius: var(--r-xl);
@@ -56,40 +46,6 @@
   width: 96%;
   max-width: none;
   translate: -50% 0;
-  transition: scale 700ms var(--ease-out);
-}
-
-/* Luz que segue o cursor sobre a foto */
-.about__photo-spot {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 30%), rgb(56 211 133 / 0.22), transparent 60%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur-ui) var(--ease-out);
-}
-
-/* Hover (só com mouse): a foto cresce um pouco, a moldura ganha sombra e a luz aparece */
-@media (hover: hover) and (pointer: fine) {
-  .about__photo-frame:hover {
-    border-color: color-mix(in srgb, var(--c-brand) 55%, transparent);
-    box-shadow: var(--shadow-demo);
-  }
-
-  .about__photo-frame:hover .about__photo-spot {
-    opacity: 1;
-  }
-
-  .about__photo-frame:hover img {
-    scale: 1.035;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .about__photo-frame {
-    transform: none;
-  }
 }
 
 .about__photo-caption {

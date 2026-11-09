@@ -23,13 +23,39 @@ const SOURCES = [
   { name: "moraesluz-historia", file: "project moraesluz adv/Mladvft2.png", widths: [480, 800, 1200] },
   { name: "moraesluz-diferenciais", file: "project moraesluz adv/Mladvft3.png", widths: [480, 800, 1200] },
   { name: "miguel-retrato", file: "miguel-retrato.webp", widths: [360, 560, 900], alpha: true },
+  { name: "salvaeh-icon", file: "salvaeh-icon.png", widths: [112, 224], alpha: true },
+  {
+    name: "arqueiro",
+    file: "arqueiro.png",
+    widths: [360, 540, 720],
+    alpha: true,
+    quality: 60, // a textura pontilhada pesa muito em qualidade alta
+    // fundo branco vira transparência; recorte ao redor da figura
+    knockout: { left: 400, top: 55, width: 730, height: 970 },
+  },
 ];
+
+/** Converte o branco em transparência (cor → alfa), preservando o verde da tinta. */
+async function knockoutWhite(input, crop) {
+  const { data, info } = await sharp(input).extract(crop).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let i = 0; i < data.length; i += 4) {
+    const a = 1 - Math.min(data[i], data[i + 1], data[i + 2]) / 255;
+    if (a < 0.02) {
+      data[i + 3] = 0;
+      continue;
+    }
+    for (let c = 0; c < 3; c++) data[i + c] = Math.max(0, Math.round((data[i + c] - 255 * (1 - a)) / a));
+    data[i + 3] = Math.round(a * 255);
+  }
+  return sharp(data, { raw: info });
+}
 
 await mkdir(OUT_DIR, { recursive: true });
 const manifest = {};
 
 for (const src of SOURCES) {
-  const input = path.join(ROOT, "images-src", src.file);
+  const file = path.join(ROOT, "images-src", src.file);
+  const input = src.knockout ? await (await knockoutWhite(file, src.knockout)).png().toBuffer() : file;
   const meta = await sharp(input).metadata();
   const ratio = meta.height / meta.width;
   const widths = src.widths.filter((w) => w <= meta.width);
@@ -37,7 +63,7 @@ for (const src of SOURCES) {
   for (const w of widths) {
     await sharp(input)
       .resize({ width: w })
-      .webp({ quality: src.alpha ? 82 : 78, effort: 6 })
+      .webp({ quality: src.quality ?? (src.alpha ? 82 : 78), alphaQuality: src.quality ?? 100, effort: 6 })
       .toFile(path.join(OUT_DIR, `${src.name}-${w}.webp`));
   }
 

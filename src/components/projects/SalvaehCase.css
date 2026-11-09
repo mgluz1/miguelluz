@@ -1,0 +1,230 @@
+/* Identidade do salvaeh, escopada ao card: verde #01c77c, EB Garamond (títulos) e Geist (texto) */
+.salvaeh {
+  --sv-green: #01c77c;
+  --sv-green-text: #017f4f;
+  --sv-ink: #1c1917;
+  --sv-dark: #141416;
+  --sv-paper: #fafaf9;
+
+  position: relative;
+  display: grid;
+  gap: var(--space-6);
+  overflow: hidden;
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(ellipse 55% 70% at 100% 0%, rgb(1 199 124 / 0.12), transparent 70%),
+    var(--sv-paper);
+  color: var(--sv-ink);
+  font-family: "Geist Variable", var(--font-sans);
+  transition:
+    border-color var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .salvaeh:hover {
+    border-color: color-mix(in srgb, var(--sv-green) 55%, transparent);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@media (min-width: 900px) {
+  .salvaeh {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: var(--space-7);
+  }
+}
+
+.salvaeh__copy {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.salvaeh__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.salvaeh .salvaeh__mark {
+  width: 52px;
+  height: 52px;
+}
+
+.salvaeh .case__segment {
+  color: var(--sv-green-text);
+}
+
+.salvaeh__word {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.salvaeh__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: rgb(1 199 124 / 0.14);
+  color: var(--sv-green-text);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.salvaeh__status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sv-green);
+}
+
+.salvaeh__title {
+  font-family: "EB Garamond Variable", Georgia, serif;
+  font-size: clamp(2.25rem, 1.7rem + 2.4vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.salvaeh__title em {
+  color: var(--sv-green-text);
+  font-style: normal;
+}
+
+.salvaeh__text {
+  max-width: 54ch;
+  color: var(--c-text-2);
+}
+
+.salvaeh__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+/* Selos de plataforma: logos da Apple e do Android */
+.salvaeh__platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.salvaeh__platforms li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 14px 0 12px;
+  border-radius: var(--r-pill);
+  background: var(--sv-dark);
+  color: #fff;
+  font-weight: 500;
+}
+
+.salvaeh__platforms svg {
+  flex: none;
+}
+
+/* ---------- Prévia do app ---------- */
+
+.salvaeh__demo {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  background: #fff;
+  box-shadow: var(--shadow-demo);
+}
+
+.salvaeh__input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 6px 6px 6px var(--space-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  background: var(--sv-paper);
+  color: var(--c-text-2);
+  font-size: var(--fs-small);
+}
+
+.salvaeh__input b {
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  background: var(--sv-dark);
+  color: #fff;
+  font-weight: 600;
+}
+
+.salvaeh__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.salvaeh__filters li,
+.salvaeh__cards em {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-style: normal;
+}
+
+.salvaeh__filters li {
+  padding: 3px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  color: var(--c-text-2);
+}
+
+.salvaeh__filters i,
+.salvaeh__cards i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.salvaeh__cards {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.salvaeh__cards li {
+  display: grid;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: var(--sv-paper);
+}
+
+.salvaeh__cards p {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.salvaeh__cards span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--c-text-2);
+  font-size: 0.75rem;
+}
