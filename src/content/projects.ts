@@ -155,11 +155,11 @@ export const mglabsProject = {
 export const salvaehProject = {
   name: "salvaeh",
   segment: "Produto próprio · app",
-  status: "No ar",
+  status: "Em desenvolvimento",
   url: "https://salvaeh.vercel.app/",
   urlLabel: "salvaeh.vercel.app",
   text:
-    "App para guardar links e notas e encontrar tudo depois. Você cola um link, ou compartilha direto do Instagram e do TikTok, e o salvaeh busca título e capa e separa por tipo. O Salve AI responde perguntas com base no que foi salvo. Funciona no site, no iPhone e no Android.",
+    "App para guardar links e notas e encontrar tudo depois. Você cola um link, ou compartilha direto do Instagram e do TikTok, e o salvaeh busca título e capa e separa por tipo. O Salve AI responde perguntas com base no que foi salvo. Em desenvolvimento: já funciona no site e os apps para iPhone e Android estão chegando em breve.",
   types: [
     { label: "Receitas", color: "#fe6701" },
     { label: "Lugares", color: "#01b6a5" },

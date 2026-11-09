@@ -76,8 +76,8 @@
   gap: 6px;
   padding: 2px 9px;
   border-radius: var(--r-pill);
-  background: rgb(1 199 124 / 0.14);
-  color: var(--sv-green-text);
+  background: rgb(201 161 59 / 0.16);
+  color: #7a5e14;
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -86,7 +86,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--sv-green);
+  background: var(--c-state-progress);
 }
 
 .salvaeh__title {
@@ -136,6 +136,18 @@
 
 .salvaeh__platforms svg {
   flex: none;
+}
+
+.salvaeh__soon {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgb(201 161 59 / 0.22);
+  color: #f0d88a;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* ---------- Prévia do app ---------- */
