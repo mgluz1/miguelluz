@@ -34,7 +34,7 @@ const pad = (v: number) => {
 };
 
 /**
- * Galeria espacial: um plano infinito com os projetos da MGLabs que o visitante
+ * Galeria espacial: um plano infinito com os sites publicados pela MGLabs que o visitante
  * arrasta em qualquer direção (mouse, toque, trackpad ou teclado).
  *
  * Sem JavaScript (ou na pré-renderização) a mesma lista aparece como grade
@@ -278,7 +278,7 @@ export function ProjectCanvas() {
       const rect = e.currentTarget.getBoundingClientRect();
       cursorRef.current.style.transform = `translate3d(${e.clientX - rect.left}px, ${e.clientY - rect.top}px, 0)`;
       if (c.dragging) setCursor("Arrastando", "drag");
-      else if ((e.target as Element).closest(".gcard")) setCursor("Abrir", "open");
+      else if ((e.target as Element).closest(".gcard")) setCursor("Visitar site", "open");
       else setCursor("Arraste", "idle");
     }
 
@@ -388,11 +388,11 @@ export function ProjectCanvas() {
       }
     >
       <h3 id="galeria-title" className="visually-hidden">
-        Galeria de projetos
+        Galeria de sites
       </h3>
       <p id="galeria-help" className="visually-hidden">
-        Plano arrastável com {galleryItems.length} projetos. Arraste com o mouse ou o dedo, use as setas do teclado para
-        mover e Home para voltar ao início. Tab percorre os projetos. Também há um botão para ver tudo como lista.
+        Plano arrastável com {galleryItems.length} sites. Arraste com o mouse ou o dedo, use as setas do teclado para
+        mover e Home para voltar ao início. Tab percorre os sites. Também há um botão para ver tudo como lista.
       </p>
 
       <div ref={frameRef} className="gallery__frame">
@@ -454,7 +454,7 @@ export function ProjectCanvas() {
 
             <div className="gallery__hud" data-hud>
               <p className="gallery__meta mono" aria-hidden="true">
-                <span className="gallery__count">{count} projetos</span>
+                <span className="gallery__count">{count} sites</span>
                 <span ref={coordRef} className="gallery__coords">
                   x +0000 · y +0000
                 </span>

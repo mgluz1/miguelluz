@@ -22,6 +22,9 @@ const SOURCES = [
   { name: "moraesluz-hero", file: "project moraesluz adv/Mladvft1.png", widths: [640, 1024, 1600] },
   { name: "moraesluz-historia", file: "project moraesluz adv/Mladvft2.png", widths: [480, 800, 1200] },
   { name: "moraesluz-diferenciais", file: "project moraesluz adv/Mladvft3.png", widths: [480, 800, 1200] },
+  { name: "joaocastro-hero", file: "galeria/joaocastro.png", widths: [640, 1024] },
+  { name: "adrianabelocorp-hero", file: "galeria/adrianabelocorp.png", widths: [640, 1024] },
+  { name: "terapeutacassialuz-hero", file: "galeria/terapeutacassialuz.png", widths: [640, 1024] },
   { name: "miguel-retrato", file: "miguel-retrato.webp", widths: [360, 560, 900], alpha: true },
   { name: "salvaeh-icon", file: "salvaeh-icon.png", widths: [112, 224], alpha: true },
   {

@@ -1,24 +1,26 @@
 /* ===================================================================
-   Galeria espacial — plano infinito arrastável com os projetos.
-   Painel escuro com a tinta do wordmark "mglabs." e destaques em menta.
+   Galeria espacial — plano infinito arrastável com os sites publicados.
+   Tema claro: papel do portfólio, pontos discretos e destaques em verde.
    =================================================================== */
 
 .gallery {
   --card-w: 312px;
   --card-h: 291px;
+  --plane: #f1f4f2;
+  --glass: rgb(255 255 255 / 0.82);
   position: relative;
   margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
 }
 
-/* Moldura de altura fixa: mais projetos nunca aumentam a página. */
+/* Moldura de altura fixa: mais sites nunca aumentam a página. */
 .gallery__frame {
   position: relative;
   height: clamp(460px, 74svh, 680px);
-  border: 1px solid var(--c-dark-border);
+  border: 1px solid var(--c-border);
   border-radius: var(--r-xl);
   overflow: hidden;
-  background: var(--c-dark);
-  box-shadow: var(--shadow-demo);
+  background: var(--plane);
+  box-shadow: var(--shadow-md);
   isolation: isolate;
 }
 
@@ -35,8 +37,8 @@
   position: absolute;
   inset: 0;
   overflow: clip;
-  background-color: var(--c-dark);
-  background-image: radial-gradient(circle, rgb(159 176 192 / 0.16) 1px, transparent 1.3px);
+  background-color: var(--plane);
+  background-image: radial-gradient(circle, rgb(91 101 119 / 0.22) 1px, transparent 1.3px);
   background-size: 28px 28px;
   cursor: grab;
   touch-action: none;
@@ -56,11 +58,11 @@
 }
 
 .gallery__viewport:focus-visible {
-  outline: 2px solid var(--c-mint);
+  outline: 2px solid var(--c-green);
   outline-offset: -4px;
 }
 
-/* Bordas que se dissolvem no escuro: o plano continua além do que se vê. */
+/* Bordas que se dissolvem no papel: o plano continua além do que se vê. */
 .gallery__viewport::after {
   content: "";
   position: absolute;
@@ -68,9 +70,9 @@
   z-index: 2;
   pointer-events: none;
   background:
-    linear-gradient(90deg, var(--c-dark), transparent 9%, transparent 91%, var(--c-dark)),
-    linear-gradient(180deg, var(--c-dark), transparent 12%, transparent 84%, var(--c-dark));
-  opacity: 0.85;
+    linear-gradient(90deg, var(--plane), transparent 8%, transparent 92%, var(--plane)),
+    linear-gradient(180deg, var(--plane), transparent 11%, transparent 85%, var(--plane));
+  opacity: 0.9;
 }
 
 .gallery__plane {
@@ -116,6 +118,15 @@
 
 /* ---------- HUD ---------- */
 
+.gallery__hint,
+.gallery__meta,
+.gallery__btn {
+  border: 1px solid var(--c-border);
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+}
+
 .gallery__hint {
   position: absolute;
   top: 16px;
@@ -126,13 +137,11 @@
   gap: 8px;
   margin: 0;
   padding: 7px 12px;
-  border: 1px solid var(--c-dark-border);
   border-radius: var(--r-pill);
-  background: rgb(14 22 32 / 0.78);
-  backdrop-filter: blur(8px);
-  color: var(--c-dark-text);
+  color: var(--c-text);
   font-size: 0.6875rem;
   letter-spacing: 0.04em;
+  white-space: nowrap;
   pointer-events: none;
   translate: -50% 0;
   transition:
@@ -141,7 +150,7 @@
 }
 
 .gallery__hint svg {
-  color: var(--c-mint);
+  color: var(--c-green);
 }
 
 .gallery.is-explored .gallery__hint {
@@ -171,18 +180,15 @@
   gap: 4px 12px;
   margin: 0;
   padding: 7px 12px;
-  border: 1px solid var(--c-dark-border);
   border-radius: var(--r-pill);
-  background: rgb(14 22 32 / 0.78);
-  backdrop-filter: blur(8px);
-  color: var(--c-dark-text-2);
+  color: var(--c-text-2);
   font-size: 0.6875rem;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
 
 .gallery__count {
-  color: var(--c-dark-text);
+  color: var(--c-text);
 }
 
 .gallery__count::before {
@@ -192,7 +198,7 @@
   height: 6px;
   margin-right: 8px;
   border-radius: 50%;
-  background: var(--c-mint);
+  background: var(--c-brand);
   vertical-align: 1px;
 }
 
@@ -215,11 +221,8 @@
   min-width: 40px;
   min-height: 40px;
   padding: 0 11px;
-  border: 1px solid var(--c-dark-border);
   border-radius: var(--r-pill);
-  background: rgb(14 22 32 / 0.78);
-  backdrop-filter: blur(8px);
-  color: var(--c-dark-text);
+  color: var(--c-text);
   font: inherit;
   font-size: 0.6875rem;
   cursor: pointer;
@@ -235,19 +238,19 @@
 
 @media (hover: hover) {
   .gallery__btn:hover {
-    border-color: var(--c-mint);
-    color: var(--c-mint);
+    border-color: var(--c-green);
+    color: var(--c-green);
   }
 }
 
 .gallery__btn:focus-visible {
-  outline: 2px solid var(--c-mint);
+  outline: 2px solid var(--c-green);
   outline-offset: 2px;
 }
 
 .gallery__btn[aria-pressed="true"] {
   border-color: var(--c-state-progress);
-  color: #f0d88a;
+  color: #7a5e14;
 }
 
 /* Rótulo que acompanha o ponteiro (só mouse/trackpad) */
@@ -259,8 +262,8 @@
   margin: 18px 0 0 14px;
   padding: 5px 10px;
   border-radius: var(--r-pill);
-  background: var(--c-mint);
-  color: var(--c-brand-ink);
+  background: var(--c-text);
+  color: #fff;
   font-size: 0.6875rem;
   font-weight: 600;
   white-space: nowrap;
@@ -270,7 +273,8 @@
   transition:
     opacity var(--dur-fast) var(--ease-out),
     scale var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out);
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
 }
 
 .gallery__viewport:hover .gallery__cursor {
@@ -279,7 +283,8 @@
 }
 
 .gallery__cursor[data-state="open"] {
-  background: var(--c-dark-text);
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
 }
 
 .gallery__cursor[data-state="drag"] {
@@ -324,15 +329,15 @@
   position: relative;
   display: grid;
   width: var(--card-w);
-  border: 1px solid var(--c-dark-border);
+  border: 1px solid var(--c-border);
   border-radius: 14px;
   overflow: hidden;
-  background: var(--c-dark-2);
-  color: var(--c-dark-text);
+  background: var(--c-surface);
+  color: var(--c-text);
   text-decoration: none;
   box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.04) inset,
-    0 18px 40px -22px rgb(0 0 0 / 0.7);
+    0 1px 2px rgb(15 23 42 / 0.05),
+    0 18px 36px -24px rgb(15 23 42 / 0.28);
   -webkit-user-drag: none;
   transition:
     translate var(--dur-ui) var(--ease-out),
@@ -341,18 +346,18 @@
 }
 
 .gcard:focus-visible {
-  outline: 2px solid var(--c-mint);
+  outline: 2px solid var(--c-green);
   outline-offset: 4px;
 }
 
 @media (hover: hover) {
   .gallery:not(.is-dragging) .gcard:hover {
     translate: 0 -4px;
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--c-dark-border));
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--c-border));
     box-shadow:
-      0 1px 0 rgb(255 255 255 / 0.06) inset,
-      0 28px 60px -24px rgb(0 0 0 / 0.85),
-      0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+      0 1px 2px rgb(15 23 42 / 0.05),
+      0 30px 56px -26px rgb(15 23 42 / 0.4),
+      0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
   }
 }
 
@@ -362,8 +367,8 @@
   gap: 10px;
   height: 30px;
   padding: 0 12px;
-  border-bottom: 1px solid var(--c-dark-border);
-  background: var(--c-dark-3);
+  border-bottom: 1px solid var(--c-border);
+  background: #f7f9f8;
 }
 
 .gcard__dots {
@@ -375,12 +380,12 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--c-dark-border);
+  background: var(--c-border-strong);
 }
 
 .gcard__host {
   overflow: hidden;
-  color: var(--c-dark-text-2);
+  color: var(--c-text-2);
   font-size: 0.625rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -391,7 +396,7 @@
   display: block;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: var(--c-dark-3);
+  background: var(--c-surface-2);
 }
 
 /* Esqueleto enquanto a prévia carrega */
@@ -399,7 +404,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgb(159 176 192 / 0.07) 50%, transparent 70%);
+  background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.75) 50%, transparent 70%);
   background-size: 220% 100%;
 }
 
@@ -443,37 +448,25 @@
   }
 }
 
-/* Capa para projetos sem captura pública */
+/* Capa para um site ainda sem captura */
 .gcard__cover {
   position: relative;
   display: grid;
   place-content: center;
-  justify-items: center;
-  gap: 12px;
   height: 100%;
   padding: 18px;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 115%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%),
-    radial-gradient(circle, rgb(255 255 255 / 0.06) 1px, transparent 1.3px) 0 0 / 16px 16px,
-    var(--ink);
+    radial-gradient(ellipse 70% 60% at 50% 115%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    var(--c-surface-2);
   text-align: center;
-}
-
-.gcard__mark {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--accent) 70%, transparent);
-  -webkit-user-drag: none;
 }
 
 .gcard__tagline {
   max-width: 22ch;
-  color: #fff;
+  color: var(--accent);
   font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.15;
-  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
@@ -504,7 +497,7 @@
 
 .gcard__cat {
   overflow: hidden;
-  color: var(--c-dark-text-2);
+  color: var(--c-text-2);
   font-size: 0.625rem;
   letter-spacing: 0.02em;
   text-overflow: ellipsis;
@@ -517,9 +510,9 @@
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--c-dark-border);
+  border: 1px solid var(--c-border);
   border-radius: 50%;
-  color: var(--c-dark-text-2);
+  color: var(--c-text-2);
   transition:
     background-color var(--dur-ui) var(--ease-out),
     border-color var(--dur-ui) var(--ease-out),
@@ -532,8 +525,8 @@
 
 @media (hover: hover) {
   .gallery:not(.is-dragging) .gcard:hover .gcard__go {
-    border-color: var(--c-mint);
-    background: var(--c-mint);
+    border-color: var(--c-brand);
+    background: var(--c-brand);
     color: var(--c-brand-ink);
   }
 
@@ -543,8 +536,8 @@
 }
 
 .gcard:focus-visible .gcard__go {
-  border-color: var(--c-mint);
-  color: var(--c-mint);
+  border-color: var(--c-green);
+  color: var(--c-green);
 }
 
 .gcard__status {
@@ -555,10 +548,11 @@
   align-items: center;
   gap: 6px;
   padding: 3px 9px;
+  border: 1px solid rgb(217 226 221 / 0.9);
   border-radius: var(--r-pill);
-  background: rgb(7 13 20 / 0.72);
+  background: rgb(255 255 255 / 0.88);
   backdrop-filter: blur(6px);
-  color: var(--c-dark-text);
+  color: var(--c-text);
   font-size: 0.625rem;
 }
 
@@ -567,13 +561,5 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--c-mint);
-}
-
-.gcard__status--progress::before {
-  background: var(--c-state-progress);
-}
-
-.gcard__status--done::before {
-  background: var(--c-dark-text-2);
+  background: var(--c-brand);
 }

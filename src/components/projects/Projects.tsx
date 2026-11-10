@@ -16,7 +16,7 @@ export function Projects() {
           id="projetos-title"
           eyebrow="Projetos"
           title={["Sites para negócios reais,", { em: "do briefing ao ar." }]}
-          lead="Dois sites publicados para clientes, um sistema de automação, um app próprio e a iniciativa pela qual desenvolvo. Para cada um: o contexto, o que fiz e as decisões técnicas que importaram."
+          lead="Arraste a galeria para explorar os sites que publiquei para clientes. Logo abaixo, estudos de caso com o contexto, o que fiz e as decisões técnicas que importaram."
         />
 
         <ProjectCanvas />

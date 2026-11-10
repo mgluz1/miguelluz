@@ -1,46 +1,34 @@
 /**
- * Galeria espacial de projetos (canvas arrastável na seção "Projetos").
+ * Galeria espacial de sites (canvas arrastável na seção "Projetos").
  *
  * Fonte única dos cartões do canvas. Para adicionar um cliente:
- *  1. (Opcional, recomendado) Salve uma captura da página inicial em images-src/,
+ *  1. Salve uma captura da página inicial (1440×900) em images-src/galeria/,
  *     registre-a em scripts/optimize-images.mjs e rode `npm run images`.
  *  2. Acrescente um objeto ao array `galleryItems` abaixo.
  *
  * O canvas se reorganiza sozinho: a altura da seção não muda, não importa
- * quantos projetos existam. Sem `preview`, o cartão mostra uma capa com as
- * cores do projeto (nunca uma captura inventada).
+ * quantos sites existam. Sem `preview`, o cartão mostra uma capa com a cor
+ * do projeto (nunca uma captura inventada).
  *
  * Regra do portfólio: nada de métricas, depoimentos ou resultados inventados.
  */
 
-import { featuredProjects, mglabsProject, monitorProject, salvaehProject } from "./projects";
-
-/** Tom do selo de status: no ar, em construção ou entregue sem link público. */
-export type GalleryStatusTone = "live" | "progress" | "done";
+import { featuredProjects } from "./projects";
 
 export type GalleryItem = {
   id: string;
   name: string;
-  /** Tipo de entrega · segmento — aparece sob o nome. */
+  /** Tipo de site · segmento — aparece sob o nome. */
   category: string;
   status: string;
-  statusTone: GalleryStatusTone;
-  /** Link externo (abre em nova aba) ou âncora para o estudo de caso nesta página. */
+  /** Endereço público do site (abre em nova aba). */
   href: string;
   /** Texto curto exibido na barra do navegador do cartão. */
   host: string;
   /** Captura real do site, registrada em scripts/optimize-images.mjs. */
   preview?: { image: string; alt: string };
-  /** Capa usada quando não há captura. */
-  cover: {
-    /** Cor de destaque do projeto. */
-    accent: string;
-    /** Fundo escuro da capa. */
-    ink: string;
-    /** Caminho de um ícone/logo em public/ (opcional). */
-    mark?: string;
-    tagline: string;
-  };
+  /** Cor de destaque do site — borda no hover e capa sem captura. */
+  accent: string;
 };
 
 const project = (id: string) => {
@@ -58,62 +46,58 @@ export const galleryItems: GalleryItem[] = [
     name: hm2.name,
     category: "Site institucional · Aviação executiva",
     status: hm2.status,
-    statusTone: "live",
     href: hm2.url!,
     host: hm2.urlLabel!,
     preview: { image: "hm2-hero", alt: hm2.images[0].alt },
-    cover: { accent: "#c9a13b", ink: "#0b1a2e", tagline: "Aeronaves executivas" },
+    accent: "#b8892b",
   },
   {
     id: moraesluz.id,
     name: moraesluz.name,
     category: "Landing page · Advocacia",
     status: moraesluz.status,
-    statusTone: "live",
     href: moraesluz.url!,
     host: moraesluz.urlLabel!,
     preview: { image: "moraesluz-hero", alt: moraesluz.images[0].alt },
-    cover: { accent: "#c9a13b", ink: "#0c2a1f", tagline: "Advocacia em Goiânia" },
+    accent: "#1f5a43",
   },
   {
-    id: "salvaeh",
-    name: salvaehProject.name,
-    category: "App próprio · Organização pessoal",
-    status: salvaehProject.status,
-    statusTone: "progress",
-    href: salvaehProject.url,
-    host: salvaehProject.urlLabel,
-    cover: {
-      accent: "#01c77c",
-      ink: "#06140e",
-      mark: "/img/salvaeh-icon-224.webp",
-      tagline: "Salvou? Agora você acha.",
-    },
-  },
-  {
-    id: monitorProject.id,
-    name: monitorProject.name,
-    category: "Sistema interno · Automação jurídica",
-    status: monitorProject.status,
-    statusTone: "done",
-    // Sistema privado do escritório: o cartão leva ao estudo de caso.
-    href: `#projeto-${monitorProject.id}`,
-    host: "uso interno",
-    cover: { accent: "#38d385", ink: "#070d14", tagline: "Publicações do DJEN em um só painel" },
-  },
-  {
-    id: "mglabs",
-    name: mglabsProject.name,
-    category: "Iniciativa própria · Freelancer",
+    id: "joaocastro",
+    name: "João Castro Fit",
+    category: "Site pessoal · Treino e corrida",
     status: "Publicado",
-    statusTone: "live",
-    href: mglabsProject.url,
-    host: mglabsProject.urlLabel,
-    cover: {
-      accent: "#38d385",
-      ink: "#02241a",
-      mark: "/mark-mglabs.png",
-      tagline: "Desenvolvimento web sob medida",
+    href: "https://joaocastro.fit/",
+    host: "joaocastro.fit",
+    preview: {
+      image: "joaocastro-hero",
+      alt: "Página inicial do João Castro Fit em fundo preto, com o título Treino com método. Evolução com constância. e a foto do treinador em uma academia.",
     },
+    accent: "#4f6bed",
+  },
+  {
+    id: "adrianabelocorp",
+    name: "Adriana Belocorp",
+    category: "Landing page · Planos para cirurgia plástica",
+    status: "Publicado",
+    href: "https://adrianabelocorp.netlify.app/",
+    host: "adrianabelocorp.netlify.app",
+    preview: {
+      image: "adrianabelocorp-hero",
+      alt: "Página inicial da Adriana Belocorp em tons claros e vinho, com o título Planeje sua cirurgia com clareza, no seu tempo. e a foto da consultora.",
+    },
+    accent: "#7a2a52",
+  },
+  {
+    id: "terapeutacassialuz",
+    name: "Cássia Luz",
+    category: "Site profissional · Terapia integrativa",
+    status: "Publicado",
+    href: "https://terapeutacassialuz.netlify.app/",
+    host: "terapeutacassialuz.netlify.app",
+    preview: {
+      image: "terapeutacassialuz-hero",
+      alt: "Página inicial da terapeuta Cássia Luz em azul petróleo, com o título Um cuidado que começa por ouvir você. e o retrato da terapeuta em um círculo.",
+    },
+    accent: "#2f7a64",
   },
 ];

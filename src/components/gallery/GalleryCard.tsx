@@ -31,7 +31,7 @@ export function GalleryCard({
       href={item.href}
       draggable={false}
       onFocus={onFocus ? (e) => onFocus(e.currentTarget) : undefined}
-      style={{ "--accent": item.cover.accent, "--ink": item.cover.ink } as CSSProperties}
+      style={{ "--accent": item.accent } as CSSProperties}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       <span className="gcard__chrome" aria-hidden="true">
@@ -66,10 +66,7 @@ export function GalleryCard({
           )
         ) : (
           <span className="gcard__cover">
-            {item.cover.mark && (
-              <img className="gcard__mark" src={item.cover.mark} alt="" width={48} height={48} draggable={false} />
-            )}
-            <span className="gcard__tagline">{item.cover.tagline}</span>
+            <span className="gcard__tagline">{item.name}</span>
           </span>
         )}
       </span>
@@ -84,7 +81,7 @@ export function GalleryCard({
         </span>
       </span>
 
-      <span className={`gcard__status gcard__status--${item.statusTone} mono`}>{item.status}</span>
+      <span className="gcard__status mono">{item.status}</span>
       {external && <span className="visually-hidden"> (abre em nova aba)</span>}
     </a>
   );
