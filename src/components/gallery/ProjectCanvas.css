@@ -1,0 +1,579 @@
+/* ===================================================================
+   Galeria espacial — plano infinito arrastável com os projetos.
+   Painel escuro com a tinta do wordmark "mglabs." e destaques em menta.
+   =================================================================== */
+
+.gallery {
+  --card-w: 312px;
+  --card-h: 291px;
+  position: relative;
+  margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+}
+
+/* Moldura de altura fixa: mais projetos nunca aumentam a página. */
+.gallery__frame {
+  position: relative;
+  height: clamp(460px, 74svh, 680px);
+  border: 1px solid var(--c-dark-border);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--c-dark);
+  box-shadow: var(--shadow-demo);
+  isolation: isolate;
+}
+
+@media (max-width: 639px) {
+  .gallery__frame {
+    height: clamp(420px, 70svh, 560px);
+    margin-inline: calc(-1 * var(--gutter));
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+
+.gallery__viewport {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  background-color: var(--c-dark);
+  background-image: radial-gradient(circle, rgb(159 176 192 / 0.16) 1px, transparent 1.3px);
+  background-size: 28px 28px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@supports not (overflow: clip) {
+  .gallery__viewport {
+    overflow: hidden;
+  }
+}
+
+.gallery.is-dragging .gallery__viewport {
+  cursor: grabbing;
+}
+
+.gallery__viewport:focus-visible {
+  outline: 2px solid var(--c-mint);
+  outline-offset: -4px;
+}
+
+/* Bordas que se dissolvem no escuro: o plano continua além do que se vê. */
+.gallery__viewport::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--c-dark), transparent 9%, transparent 91%, var(--c-dark)),
+    linear-gradient(180deg, var(--c-dark), transparent 12%, transparent 84%, var(--c-dark));
+  opacity: 0.85;
+}
+
+.gallery__plane {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery__cell {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--card-w);
+  will-change: transform;
+}
+
+/* Entrada do centro para fora, quando o canvas chega à tela */
+.gallery__enter {
+  transition: scale 420ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gallery.is-canvas .gallery__enter {
+    opacity: 0;
+    translate: 0 18px;
+  }
+
+  .gallery.is-canvas.is-armed .gallery__enter {
+    animation: gallery-in 900ms var(--ease-out) var(--d, 0ms) forwards;
+  }
+
+  /* Ao arrastar, os cartões recuam de leve — o plano parece ganhar profundidade. */
+  .gallery.is-dragging .gallery__enter {
+    scale: 0.965;
+  }
+}
+
+@keyframes gallery-in {
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---------- HUD ---------- */
+
+.gallery__hint {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid var(--c-dark-border);
+  border-radius: var(--r-pill);
+  background: rgb(14 22 32 / 0.78);
+  backdrop-filter: blur(8px);
+  color: var(--c-dark-text);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  translate: -50% 0;
+  transition:
+    opacity var(--dur-ui) var(--ease-out),
+    translate var(--dur-ui) var(--ease-out);
+}
+
+.gallery__hint svg {
+  color: var(--c-mint);
+}
+
+.gallery.is-explored .gallery__hint {
+  opacity: 0;
+  translate: -50% -8px;
+}
+
+.gallery__hud {
+  position: absolute;
+  inset: auto 12px 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.gallery__hud > * {
+  pointer-events: auto;
+}
+
+.gallery__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid var(--c-dark-border);
+  border-radius: var(--r-pill);
+  background: rgb(14 22 32 / 0.78);
+  backdrop-filter: blur(8px);
+  color: var(--c-dark-text-2);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.gallery__count {
+  color: var(--c-dark-text);
+}
+
+.gallery__count::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--c-mint);
+  vertical-align: 1px;
+}
+
+@media (max-width: 480px) {
+  .gallery__coords {
+    display: none;
+  }
+}
+
+.gallery__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.gallery__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--c-dark-border);
+  border-radius: var(--r-pill);
+  background: rgb(14 22 32 / 0.78);
+  backdrop-filter: blur(8px);
+  color: var(--c-dark-text);
+  font: inherit;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.gallery__btn--text {
+  padding-inline: 14px;
+}
+
+@media (hover: hover) {
+  .gallery__btn:hover {
+    border-color: var(--c-mint);
+    color: var(--c-mint);
+  }
+}
+
+.gallery__btn:focus-visible {
+  outline: 2px solid var(--c-mint);
+  outline-offset: 2px;
+}
+
+.gallery__btn[aria-pressed="true"] {
+  border-color: var(--c-state-progress);
+  color: #f0d88a;
+}
+
+/* Rótulo que acompanha o ponteiro (só mouse/trackpad) */
+.gallery__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  margin: 18px 0 0 14px;
+  padding: 5px 10px;
+  border-radius: var(--r-pill);
+  background: var(--c-mint);
+  color: var(--c-brand-ink);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.85;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.gallery__viewport:hover .gallery__cursor {
+  opacity: 1;
+  scale: 1;
+}
+
+.gallery__cursor[data-state="open"] {
+  background: var(--c-dark-text);
+}
+
+.gallery__cursor[data-state="drag"] {
+  scale: 0.92;
+}
+
+/* ---------- Modo lista (sem JS, pré-renderização ou escolha do visitante) ---------- */
+
+.gallery__viewport--list {
+  overflow: auto;
+  cursor: auto;
+  touch-action: auto;
+  user-select: auto;
+  -webkit-user-select: auto;
+  overscroll-behavior: contain;
+}
+
+.gallery__viewport--list::after {
+  display: none;
+}
+
+.gallery .gallery__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-5);
+  margin: 0;
+  padding: clamp(1rem, 0.5rem + 2vw, 2rem) clamp(1rem, 0.5rem + 2vw, 2rem) 5rem;
+  list-style: none;
+}
+
+.gallery__list .gcard {
+  width: 100%;
+}
+
+.gallery__hud--list {
+  justify-content: flex-end;
+}
+
+/* ---------- Cartão ---------- */
+
+.gcard {
+  position: relative;
+  display: grid;
+  width: var(--card-w);
+  border: 1px solid var(--c-dark-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--c-dark-2);
+  color: var(--c-dark-text);
+  text-decoration: none;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.04) inset,
+    0 18px 40px -22px rgb(0 0 0 / 0.7);
+  -webkit-user-drag: none;
+  transition:
+    translate var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out);
+}
+
+.gcard:focus-visible {
+  outline: 2px solid var(--c-mint);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .gallery:not(.is-dragging) .gcard:hover {
+    translate: 0 -4px;
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--c-dark-border));
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.06) inset,
+      0 28px 60px -24px rgb(0 0 0 / 0.85),
+      0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+}
+
+.gcard__chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--c-dark-border);
+  background: var(--c-dark-3);
+}
+
+.gcard__dots {
+  display: flex;
+  gap: 5px;
+}
+
+.gcard__dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-dark-border);
+}
+
+.gcard__host {
+  overflow: hidden;
+  color: var(--c-dark-text-2);
+  font-size: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gcard__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--c-dark-3);
+}
+
+/* Esqueleto enquanto a prévia carrega */
+.gcard__media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgb(159 176 192 / 0.07) 50%, transparent 70%);
+  background-size: 220% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gcard__media::before {
+    animation: gcard-shimmer 1.6s linear infinite;
+  }
+}
+
+@keyframes gcard-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+.gcard__shot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  scale: 1.02;
+  -webkit-user-drag: none;
+  transition:
+    opacity 500ms var(--ease-out),
+    scale 900ms var(--ease-out);
+}
+
+.gcard__shot.is-loaded {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (hover: hover) {
+  .gallery:not(.is-dragging) .gcard:hover .gcard__shot.is-loaded {
+    scale: 1.04;
+  }
+}
+
+/* Capa para projetos sem captura pública */
+.gcard__cover {
+  position: relative;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 18px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 115%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%),
+    radial-gradient(circle, rgb(255 255 255 / 0.06) 1px, transparent 1.3px) 0 0 / 16px 16px,
+    var(--ink);
+  text-align: center;
+}
+
+.gcard__mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+  -webkit-user-drag: none;
+}
+
+.gcard__tagline {
+  max-width: 22ch;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.gcard__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 66px;
+  padding: 10px 12px 10px 14px;
+}
+
+.gcard__text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.gcard__name {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gcard__cat {
+  overflow: hidden;
+  color: var(--c-dark-text-2);
+  font-size: 0.625rem;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gcard__go {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--c-dark-border);
+  border-radius: 50%;
+  color: var(--c-dark-text-2);
+  transition:
+    background-color var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out),
+    color var(--dur-ui) var(--ease-out);
+}
+
+.gcard__go svg {
+  transition: translate var(--dur-ui) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .gallery:not(.is-dragging) .gcard:hover .gcard__go {
+    border-color: var(--c-mint);
+    background: var(--c-mint);
+    color: var(--c-brand-ink);
+  }
+
+  .gallery:not(.is-dragging) .gcard:hover .gcard__go svg {
+    translate: 1.5px -1.5px;
+  }
+}
+
+.gcard:focus-visible .gcard__go {
+  border-color: var(--c-mint);
+  color: var(--c-mint);
+}
+
+.gcard__status {
+  position: absolute;
+  top: 38px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  background: rgb(7 13 20 / 0.72);
+  backdrop-filter: blur(6px);
+  color: var(--c-dark-text);
+  font-size: 0.625rem;
+}
+
+.gcard__status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-mint);
+}
+
+.gcard__status--progress::before {
+  background: var(--c-state-progress);
+}
+
+.gcard__status--done::before {
+  background: var(--c-dark-text-2);
+}

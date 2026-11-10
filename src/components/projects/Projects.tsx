@@ -1,4 +1,5 @@
 import { featuredProjects, mglabsProject } from "../../content/projects";
+import { ProjectCanvas } from "../gallery/ProjectCanvas";
 import { ButtonLink } from "../ui/Button";
 import { SectionHeader } from "../ui/SectionHeader";
 import { TagList } from "../ui/Tag";
@@ -17,6 +18,8 @@ export function Projects() {
           title={["Sites para negócios reais,", { em: "do briefing ao ar." }]}
           lead="Dois sites publicados para clientes, um sistema de automação, um app próprio e a iniciativa pela qual desenvolvo. Para cada um: o contexto, o que fiz e as decisões técnicas que importaram."
         />
+
+        <ProjectCanvas />
 
         {featuredProjects.map((project) => (
           <ProjectCase key={project.id} project={project} />

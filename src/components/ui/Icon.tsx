@@ -47,6 +47,23 @@ const paths = {
       <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
     </>
   ),
+  /** Setas nas quatro direções — arrastar/mover */
+  drag: <path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" />,
+  target: (
+    <>
+      <circle cx="12" cy="12" r="7" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+    </>
+  ),
+  grid: (
+    <>
+      <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+    </>
+  ),
 } as const;
 
 export type IconName = keyof typeof paths;
