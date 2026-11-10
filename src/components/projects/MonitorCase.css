@@ -119,6 +119,14 @@
 
 /* ---------- Capturas reais: painel em destaque e tela de acesso sobreposta ---------- */
 
+/* Coluna da direita: animação ilustrativa e, abaixo, as capturas reais. */
+.monitor__side {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  min-width: 0;
+}
+
 .monitor__shots {
   position: relative;
   margin: 0;
