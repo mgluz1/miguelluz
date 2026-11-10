@@ -1,24 +1,24 @@
 /**
- * Layout do canvas infinito.
+ * Layout do canvas arrastável.
  *
- * Os cartões ficam em uma "telha" (tile) retangular de colunas × linhas, com as
- * colunas ímpares deslocadas meia célula para baixo. A telha se repete em todas
- * as direções: cada célula é desenhada na posição `mod(base + câmera, telha)`.
- * Assim o número de elementos no DOM depende só do tamanho da tela, nunca de
- * quanto o visitante arrasta — e a altura da seção nunca cresce.
+ * Cada site aparece uma única vez, em colunas com as ímpares deslocadas meia
+ * célula para baixo e um leve desalinhamento — um campo para explorar, não uma
+ * grade rígida. O número de colunas acompanha o formato da tela, então o campo
+ * transborda a área visível e convida a arrastar. A câmera fica presa às bordas
+ * do campo (com resistência elástica), e a altura da seção nunca muda.
  */
 
 export type Cell = {
-  /** Índice do projeto em galleryItems. */
+  /** Índice do site em galleryItems. */
   item: number;
-  /** Posição base dentro da telha (px). */
+  /** Posição do cartão no campo (px). */
   bx: number;
   by: number;
-  /** Primeira ocorrência do projeto: é a única focável e lida por leitores de tela. */
-  primary: boolean;
   /** Atraso da animação de entrada, do centro para fora (ms). */
   delay: number;
 };
+
+export type Bounds = { minX: number; maxX: number; minY: number; maxY: number };
 
 export type CanvasLayout = {
   vw: number;
@@ -29,26 +29,12 @@ export type CanvasLayout = {
   cellH: number;
   cols: number;
   rows: number;
-  /** Tamanho da telha que se repete. */
-  W: number;
-  H: number;
   cells: Cell[];
+  /** Limites da câmera: até onde o campo pode ser arrastado. */
+  bounds: Bounds;
+  /** Câmera inicial, com o campo centralizado. */
+  home: { x: number; y: number };
 };
-
-const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
-
-/**
- * Passo entre linhas: a linha r começa no projeto r·step. Escolhido para que
- * vizinhos (lado a lado e na diagonal) sejam projetos diferentes.
- */
-function rowStep(n: number) {
-  if (n < 3) return 1;
-  for (let s = 2; s < n - 1; s++) {
-    if (gcd(s, n) === 1 && (1 + s) % n !== 0 && (s - 1) % n !== 0) return s;
-  }
-  for (let s = 2; s < n; s++) if (gcd(s, n) === 1) return s;
-  return 1;
-}
 
 /** Ruído determinístico por célula, para um arranjo menos rígido. */
 function jitter(c: number, r: number, salt: number) {
@@ -61,64 +47,70 @@ export function computeLayout(vw: number, vh: number, n: number): CanvasLayout {
   const cardW = compact ? 232 : 312;
   // barra do navegador (30) + prévia 16:10 + rodapé com nome e categoria (66)
   const cardH = 30 + Math.round((cardW * 10) / 16) + 66;
-  const gapX = compact ? 44 : 80;
-  const gapY = compact ? 44 : 64;
+  const gapX = compact ? 64 : 120;
+  const gapY = compact ? 56 : 88;
   const cellW = cardW + gapX;
   const cellH = cardH + gapY;
+  // Margem livre entre o campo e a borda quando arrastado até o fim.
+  const pad = compact ? 28 : 48;
 
-  const step = rowStep(n);
-  // A telha precisa cobrir a tela inteira mais uma célula de folga em cada eixo.
-  let cols = Math.max(2, Math.ceil(vw / cellW) + 1);
-  let rows = Math.max(2, Math.ceil(vh / cellH) + 2);
-
-  // Número par de colunas mantém o deslocamento alternado contínuo na emenda;
-  // e evitamos repetir o mesmo projeto lado a lado na emenda da telha.
-  while (cols % 2 !== 0 || (n > 1 && (cols - 1) % n === 0)) cols++;
-  while (n > 2 && ((rows - 1) * step) % n === 0) rows++;
-  while (cols * rows < n) rows++;
+  // Colunas que deixam o campo com proporção parecida com a da tela.
+  const cols = Math.max(1, Math.min(n, Math.round(Math.sqrt((n * (vw / vh) * cellH) / cellW))));
+  const rows = Math.max(1, Math.ceil(n / cols));
 
   const cells: Cell[] = [];
-  const seen = new Set<number>();
   const cx = (cols - 1) / 2;
   const cy = (rows - 1) / 2;
-
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const item = n ? (c + r * step) % n : 0;
-      const primary = !seen.has(item);
-      seen.add(item);
-      cells.push({
-        item,
-        bx: Math.round(c * cellW + jitter(c, r, 1) * gapX * 0.22),
-        by: Math.round(r * cellH + (c % 2 ? cellH / 2 : 0) + jitter(c, r, 2) * gapY * 0.3),
-        primary,
-        delay: Math.round(Math.hypot(c - cx, r - cy) * 70),
-      });
-    }
+  for (let i = 0; i < n; i++) {
+    const c = i % cols;
+    const r = Math.floor(i / cols);
+    cells.push({
+      item: i,
+      bx: Math.round(c * cellW + jitter(c, r, 1) * gapX * 0.18),
+      by: Math.round(r * cellH + (c % 2 ? cellH / 2 : 0) + jitter(c, r, 2) * gapY * 0.25),
+      delay: Math.round(Math.hypot(c - cx, r - cy) * 80),
+    });
   }
 
-  return { vw, vh, cardW, cardH, cellW, cellH, cols, rows, W: cols * cellW, H: rows * cellH, cells };
+  const left = Math.min(...cells.map((c) => c.bx));
+  const right = Math.max(...cells.map((c) => c.bx)) + cardW;
+  const top = Math.min(...cells.map((c) => c.by));
+  const bottom = Math.max(...cells.map((c) => c.by)) + cardH;
+
+  /** Faixa da câmera num eixo; se o campo cabe na tela, ele fica centralizado. */
+  const axis = (start: number, end: number, view: number) => {
+    const center = (view - (start + end)) / 2;
+    if (end - start + pad * 2 <= view) return { min: center, max: center, center };
+    return { min: view - pad - end, max: pad - start, center };
+  };
+  const ax = axis(left, right, vw);
+  const ay = axis(top, bottom, vh);
+
+  return {
+    vw,
+    vh,
+    cardW,
+    cardH,
+    cellW,
+    cellH,
+    cols,
+    rows,
+    cells,
+    bounds: { minX: ax.min, maxX: ax.max, minY: ay.min, maxY: ay.max },
+    home: { x: ax.center, y: ay.center },
+  };
 }
 
-/** Módulo sempre positivo. */
-export const mod = (a: number, m: number) => ((a % m) + m) % m;
+export const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
-/** Menor deslocamento equivalente dentro de uma telha que se repete. */
-export const wrapDelta = (d: number, m: number) => mod(d + m / 2, m) - m / 2;
+/** Câmera dentro dos limites. */
+export function clampCamera(layout: CanvasLayout, x: number, y: number) {
+  const b = layout.bounds;
+  return { x: clamp(x, b.minX, b.maxX), y: clamp(y, b.minY, b.maxY) };
+}
 
-/** Câmera que centraliza a célula `i` na tela. */
+/** Câmera que centraliza a célula `i` na tela (respeitando os limites). */
 export function cameraFor(layout: CanvasLayout, i: number) {
   const cell = layout.cells[i];
-  return {
-    x: layout.vw / 2 - layout.cardW / 2 + layout.cellW - cell.bx,
-    y: layout.vh / 2 - layout.cardH / 2 + layout.cellH - cell.by,
-  };
-}
-
-/** Posição de tela da célula para a câmera atual. */
-export function cellPosition(layout: CanvasLayout, cell: Cell, camX: number, camY: number) {
-  return {
-    x: mod(cell.bx + camX, layout.W) - layout.cellW,
-    y: mod(cell.by + camY, layout.H) - layout.cellH,
-  };
+  return clampCamera(layout, layout.vw / 2 - layout.cardW / 2 - cell.bx, layout.vh / 2 - layout.cardH / 2 - cell.by);
 }

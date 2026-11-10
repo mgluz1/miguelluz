@@ -13,7 +13,7 @@ import { galleryItems } from "../../content/gallery";
 import { useFinePointer, useReducedMotion } from "../../hooks/useMediaQuery";
 import { useInView } from "../../hooks/useInView";
 import { Icon } from "../ui/Icon";
-import { cameraFor, cellPosition, computeLayout, wrapDelta, type CanvasLayout } from "./canvasLayout";
+import { cameraFor, clampCamera, computeLayout, type CanvasLayout } from "./canvasLayout";
 import { GalleryCard } from "./GalleryCard";
 import "./ProjectCanvas.css";
 
@@ -21,9 +21,8 @@ import "./ProjectCanvas.css";
 const FRICTION_PER_SECOND = 0.006;
 /** Movimento mínimo (px) para um toque virar arraste — abaixo disso é clique. */
 const DRAG_THRESHOLD = 6;
-/** Deriva lenta quando ninguém interage (px/ms). */
-const DRIFT = { x: -0.012, y: -0.005 };
-const IDLE_BEFORE_DRIFT = 2600;
+/** Quanto do arraste passa quando o campo já está além da borda (resistência elástica). */
+const EDGE_RESISTANCE = 0.35;
 const DOT_GRID = 28;
 
 type Sample = { x: number; y: number; t: number };
@@ -34,8 +33,9 @@ const pad = (v: number) => {
 };
 
 /**
- * Galeria espacial: um plano infinito com os sites publicados pela MGLabs que o visitante
- * arrasta em qualquer direção (mouse, toque, trackpad ou teclado).
+ * Galeria espacial: um campo com os sites publicados pela MGLabs que o visitante
+ * arrasta em qualquer direção (mouse, toque, trackpad ou teclado). Cada site
+ * aparece uma vez; nas bordas o campo resiste e volta, como uma superfície elástica.
  *
  * Sem JavaScript (ou na pré-renderização) a mesma lista aparece como grade
  * simples — o conteúdo nunca depende da interação.
@@ -52,7 +52,6 @@ export function ProjectCanvas() {
   const [listMode, setListMode] = useState(false);
   const [layout, setLayout] = useState<CanvasLayout | null>(null);
   const [armed, setArmed] = useState(false);
-  const [paused, setPaused] = useState(false);
   const [explored, setExplored] = useState(false);
 
   const reduced = useReducedMotion();
@@ -74,9 +73,6 @@ export function ProjectCanvas() {
     lastY: 0,
     dragging: false,
     moved: false,
-    hovering: false,
-    focusWithin: false,
-    lastInteract: 0,
     dirty: true,
     samples: [] as Sample[],
   });
@@ -103,16 +99,10 @@ export function ProjectCanvas() {
       if (prev && Math.abs(prev.vw - width) < 1 && Math.abs(prev.vh - height) < 1) return;
       const next = computeLayout(width, height, galleryItems.length);
       const c = cam.current;
-      const origin = cameraFor(next, 0);
-      if (!prev) {
-        c.x = origin.x;
-        c.y = origin.y;
-      } else {
-        // Mantém o ponto central ao redimensionar.
-        c.x += (width - prev.vw) / 2;
-        c.y += (height - prev.vh) / 2;
-      }
-      c.origin = origin;
+      // Ao abrir e ao redimensionar, o campo volta a ficar centralizado.
+      c.x = next.home.x;
+      c.y = next.home.y;
+      c.origin = next.home;
       c.target = null;
       c.dirty = true;
       layoutRef.current = next;
@@ -133,9 +123,7 @@ export function ProjectCanvas() {
     if (!L || !vp) return;
     L.cells.forEach((cell, i) => {
       const el = cellRefs.current[i];
-      if (!el) return;
-      const p = cellPosition(L, cell, c.x, c.y);
-      el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
+      if (el) el.style.transform = `translate3d(${cell.bx + c.x}px, ${cell.by + c.y}px, 0)`;
     });
     vp.style.backgroundPosition = `${c.x % DOT_GRID}px ${c.y % DOT_GRID}px`;
     if (coordRef.current) {
@@ -148,7 +136,7 @@ export function ProjectCanvas() {
     if (showCanvas) paint();
   }, [showCanvas, layout, paint]);
 
-  // Laço de animação: inércia, transições suaves e deriva. Só roda com o canvas visível.
+  // Laço de animação: inércia, transições suaves e retorno elástico. Só roda com o canvas visível.
   useEffect(() => {
     if (!showCanvas || !inView) return;
     let raf = 0;
@@ -173,17 +161,36 @@ export function ProjectCanvas() {
             c.y += dy * k;
           }
           c.dirty = true;
-        } else if (Math.abs(c.vx) > 0.004 || Math.abs(c.vy) > 0.004) {
-          c.x += c.vx * dt;
-          c.y += c.vy * dt;
-          const f = Math.pow(FRICTION_PER_SECOND, dt / 1000);
-          c.vx *= f;
-          c.vy *= f;
-          c.dirty = true;
-        } else if (!reduced && !paused && !c.hovering && !c.focusWithin && now - c.lastInteract > IDLE_BEFORE_DRIFT) {
-          c.x += DRIFT.x * dt;
-          c.y += DRIFT.y * dt;
-          c.dirty = true;
+        } else {
+          const L = layoutRef.current;
+          const moving = Math.abs(c.vx) > 0.004 || Math.abs(c.vy) > 0.004;
+          if (moving) {
+            c.x += c.vx * dt;
+            c.y += c.vy * dt;
+            const f = Math.pow(FRICTION_PER_SECOND, dt / 1000);
+            c.vx *= f;
+            c.vy *= f;
+            c.dirty = true;
+          }
+          if (L) {
+            // Além da borda: freia forte e puxa de volta, como uma mola.
+            const inside = clampCamera(L, c.x, c.y);
+            const ox = inside.x - c.x;
+            const oy = inside.y - c.y;
+            if (Math.abs(ox) > 0.3 || Math.abs(oy) > 0.3) {
+              const k = 1 - Math.exp(-dt / 110);
+              const brake = Math.pow(0.0005, dt / 1000);
+              if (ox) c.vx *= brake;
+              if (oy) c.vy *= brake;
+              c.x += ox * k;
+              c.y += oy * k;
+              c.dirty = true;
+            } else if ((ox || oy) && !moving) {
+              c.x = inside.x;
+              c.y = inside.y;
+              c.dirty = true;
+            }
+          }
         }
       }
 
@@ -196,18 +203,16 @@ export function ProjectCanvas() {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [showCanvas, inView, reduced, paused, paint]);
+  }, [showCanvas, inView, paint]);
 
-  /** Leva a câmera até uma posição, pelo caminho mais curto na telha infinita. */
+  /** Leva a câmera até uma posição, sempre dentro dos limites do campo. */
   const panTo = useCallback(
     (x: number, y: number) => {
       const L = layoutRef.current;
       const c = cam.current;
       if (!L) return;
-      const tx = c.x + wrapDelta(x - c.x, L.W);
-      const ty = c.y + wrapDelta(y - c.y, L.H);
+      const { x: tx, y: ty } = clampCamera(L, x, y);
       c.vx = c.vy = 0;
-      c.lastInteract = performance.now();
       if (reduced) {
         c.x = tx;
         c.y = ty;
@@ -223,8 +228,7 @@ export function ProjectCanvas() {
   const recenter = useCallback(() => {
     const L = layoutRef.current;
     if (!L) return;
-    const o = cameraFor(L, 0);
-    panTo(o.x, o.y);
+    panTo(L.home.x, L.home.y);
   }, [panTo]);
 
   // Trackpad: o gesto horizontal (ou Shift + roda) move o canvas;
@@ -237,11 +241,13 @@ export function ProjectCanvas() {
       if (!horizontal && !e.shiftKey) return;
       e.preventDefault();
       const c = cam.current;
-      c.x -= horizontal ? e.deltaX : e.deltaY;
-      if (horizontal) c.y -= e.deltaY;
+      const L = layoutRef.current;
+      if (!L) return;
+      const next = clampCamera(L, c.x - (horizontal ? e.deltaX : e.deltaY), horizontal ? c.y - e.deltaY : c.y);
+      c.x = next.x;
+      c.y = next.y;
       c.target = null;
       c.vx = c.vy = 0;
-      c.lastInteract = performance.now();
       c.dirty = true;
     };
     vp.addEventListener("wheel", onWheel, { passive: false });
@@ -268,7 +274,6 @@ export function ProjectCanvas() {
     c.target = null;
     c.vx = c.vy = 0;
     c.samples = [{ x: e.clientX, y: e.clientY, t: e.timeStamp }];
-    c.lastInteract = performance.now();
   };
 
   const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -292,13 +297,17 @@ export function ProjectCanvas() {
       if (!explored) setExplored(true);
     }
 
-    c.x += e.clientX - c.lastX;
-    c.y += e.clientY - c.lastY;
+    // Dentro do campo o movimento é 1:1; além da borda, só uma fração passa.
+    const L = layoutRef.current;
+    const dx = e.clientX - c.lastX;
+    const dy = e.clientY - c.lastY;
+    const inside = L ? clampCamera(L, c.x + dx, c.y + dy) : { x: c.x + dx, y: c.y + dy };
+    c.x += inside.x === c.x + dx ? dx : dx * EDGE_RESISTANCE;
+    c.y += inside.y === c.y + dy ? dy : dy * EDGE_RESISTANCE;
     c.lastX = e.clientX;
     c.lastY = e.clientY;
     c.samples.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
     while (c.samples.length > 2 && e.timeStamp - c.samples[0].t > 100) c.samples.shift();
-    c.lastInteract = performance.now();
     c.dirty = true;
     // Durante o arraste, pinta já neste evento: sem esperar o próximo quadro.
     paint();
@@ -323,7 +332,6 @@ export function ProjectCanvas() {
       rootRef.current?.classList.remove("is-dragging");
       if (finePointer) setCursor("Arraste", "idle");
     }
-    c.lastInteract = performance.now();
   };
 
   /** Um arraste não pode terminar abrindo o projeto sob o ponteiro. */
@@ -363,7 +371,6 @@ export function ProjectCanvas() {
 
   /** Ao navegar com Tab, o cartão focado desliza até o centro. */
   const onCardFocus = (cellIndex: number, el: HTMLElement) => {
-    cam.current.focusWithin = true;
     if (!el.matches(":focus-visible")) return;
     const L = layoutRef.current;
     if (!L) return;
@@ -392,7 +399,7 @@ export function ProjectCanvas() {
       </h3>
       <p id="galeria-help" className="visually-hidden">
         Plano arrastável com {galleryItems.length} sites. Arraste com o mouse ou o dedo, use as setas do teclado para
-        mover e Home para voltar ao início. Tab percorre os sites. Também há um botão para ver tudo como lista.
+        mover e Home para centralizar. Tab percorre os sites. Também há um botão para ver tudo como lista.
       </p>
 
       <div ref={frameRef} className="gallery__frame">
@@ -409,24 +416,18 @@ export function ProjectCanvas() {
             onPointerMove={onPointerMove}
             onPointerUp={endPointer}
             onPointerCancel={endPointer}
-            onPointerEnter={() => (cam.current.hovering = true)}
-            onPointerLeave={() => (cam.current.hovering = false)}
             onClickCapture={onClickCapture}
             onKeyDown={onKeyDown}
-            onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) cam.current.focusWithin = false;
-            }}
             onScroll={resetScroll}
           >
             <div className="gallery__plane">
               {layout.cells.map((cell, i) => (
                 <div
-                  key={`${layout.cols}x${layout.rows}-${i}`}
+                  key={galleryItems[cell.item].id}
                   ref={(el) => {
                     cellRefs.current[i] = el;
                   }}
                   className="gallery__cell"
-                  inert={!cell.primary}
                   style={{ "--d": `${cell.delay}ms` } as CSSProperties}
                 >
                   <div className="gallery__enter">
@@ -460,21 +461,9 @@ export function ProjectCanvas() {
                 </span>
               </p>
               <div className="gallery__actions">
-                {!reduced && (
-                  <button
-                    type="button"
-                    className="gallery__btn"
-                    onClick={() => setPaused((p) => !p)}
-                    aria-pressed={paused}
-                    aria-label={paused ? "Retomar movimento automático" : "Pausar movimento automático"}
-                    title={paused ? "Retomar movimento" : "Pausar movimento"}
-                  >
-                    <Icon name={paused ? "play" : "pause"} size={16} />
-                  </button>
-                )}
-                <button type="button" className="gallery__btn" onClick={recenter} title="Voltar ao início">
+                <button type="button" className="gallery__btn" onClick={recenter} title="Centralizar">
                   <Icon name="target" size={16} />
-                  <span className="visually-hidden">Voltar ao início do canvas</span>
+                  <span className="visually-hidden">Centralizar a galeria</span>
                 </button>
                 <button
                   type="button"
