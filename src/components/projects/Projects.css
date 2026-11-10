@@ -50,3 +50,25 @@
 .mglabs__title {
   font-size: var(--fs-h3);
 }
+
+/* Cabeçalho compartilhado pelos estudos de caso (Controller, salvaeh e MGLabs) */
+.case__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.case__index {
+  padding: 4px 8px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-xs);
+  color: var(--c-text-2);
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+.case__segment {
+  color: var(--c-green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

@@ -121,7 +121,7 @@ export const featuredProjects: Project[] = [
  */
 export const monitorProject = {
   id: "controller",
-  index: "03",
+  index: "01",
   name: "Controller",
   segment: "Automação para advocacia",
   status: "Concluído",
