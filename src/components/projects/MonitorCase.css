@@ -10,6 +10,7 @@
   --c-mint: var(--c-green);
 
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
   margin-top: clamp(5rem, 4rem + 4vw, 8rem);
   padding: clamp(1.5rem, 1rem + 3vw, 3.5rem);
@@ -114,4 +115,64 @@
 
 .monitor__stack {
   color: var(--c-dark-text-2);
+}
+
+/* ---------- Capturas reais: painel em destaque e tela de acesso sobreposta ---------- */
+
+.monitor__shots {
+  position: relative;
+  margin: 0;
+  padding-bottom: clamp(3.5rem, 22%, 7rem);
+}
+
+.monitor__win {
+  box-shadow: var(--shadow-demo);
+}
+
+.monitor__win img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.monitor__win--main {
+  width: 100%;
+}
+
+.monitor__win--login {
+  position: absolute;
+  bottom: clamp(1.5rem, 4%, 2.5rem);
+  left: -4%;
+  width: 62%;
+  border-color: var(--c-border-strong);
+}
+
+@media (min-width: 960px) {
+  .monitor__win--login {
+    left: -9%;
+    width: 60%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .monitor__win--login {
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .monitor__shots:hover .monitor__win--login {
+      translate: -6px -6px;
+    }
+  }
+}
+
+.monitor__caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  max-width: 48%;
+  color: var(--c-text-2);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  text-align: right;
 }

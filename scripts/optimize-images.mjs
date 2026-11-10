@@ -25,6 +25,8 @@ const SOURCES = [
   { name: "joaocastro-hero", file: "galeria/joaocastro.png", widths: [640, 1024] },
   { name: "adrianabelocorp-hero", file: "galeria/adrianabelocorp.png", widths: [640, 1024] },
   { name: "terapeutacassialuz-hero", file: "galeria/terapeutacassialuz.png", widths: [640, 1024] },
+  { name: "controller-painel", file: "controller/painel.png", widths: [480, 800] },
+  { name: "controller-login", file: "controller/login.png", widths: [480, 800] },
   { name: "miguel-retrato", file: "miguel-retrato.webp", widths: [360, 560, 900], alpha: true },
   { name: "salvaeh-icon", file: "salvaeh-icon.png", widths: [112, 224], alpha: true },
   {

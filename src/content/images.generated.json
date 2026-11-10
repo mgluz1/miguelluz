@@ -77,6 +77,22 @@
       1024
     ]
   },
+  "controller-painel": {
+    "width": 800,
+    "height": 450,
+    "widths": [
+      480,
+      800
+    ]
+  },
+  "controller-login": {
+    "width": 800,
+    "height": 376,
+    "widths": [
+      480,
+      800
+    ]
+  },
   "miguel-retrato": {
     "width": 900,
     "height": 1155,

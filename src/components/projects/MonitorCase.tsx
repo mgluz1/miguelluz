@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { monitorProject as p } from "../../content/projects";
-import { PublicationsDemo } from "./PublicationsDemo";
+import { ResponsiveImage } from "../ui/ResponsiveImage";
+import { Window } from "../ui/Window";
 import "./MonitorCase.css";
 
 /** Controller — card claro com o contexto, o que o sistema faz e uma ilustração do fluxo. */
@@ -52,9 +53,26 @@ export function MonitorCase() {
         <p className="monitor__stack mono reveal">Tecnologias: {p.stack.join(" · ")}</p>
       </div>
 
-      <div className="monitor__demo reveal" style={{ "--i": 2 } as CSSProperties}>
-        <PublicationsDemo />
-      </div>
+      {/* Capturas reais do sistema; dados do escritório já borrados nas imagens. */}
+      <figure className="monitor__shots reveal" style={{ "--i": 2 } as CSSProperties}>
+        <Window className="monitor__win monitor__win--main" title="controller · painel de publicações">
+          <ResponsiveImage
+            name="controller-painel"
+            alt="Painel do Controller com a tabela de publicações do DJEN: filtros por tribunal, status e período, colunas de processo, disponibilização e status de revisão, e paginação. Nomes e números de processo estão borrados."
+            sizes="(min-width: 960px) 560px, 92vw"
+          />
+        </Window>
+        <Window className="monitor__win monitor__win--login" title="controller · acesso">
+          <ResponsiveImage
+            name="controller-login"
+            alt="Tela de acesso do Controller em verde e dourado, com o campo de usuário, o de senha e o botão Entrar."
+            sizes="(min-width: 960px) 340px, 60vw"
+          />
+        </Window>
+        <figcaption className="monitor__caption mono">
+          Capturas reais do sistema · dados do escritório borrados
+        </figcaption>
+      </figure>
     </article>
   );
 }
