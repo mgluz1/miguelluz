@@ -481,7 +481,7 @@ export function ProjectCanvas() {
             <ul className="gallery__list" role="list" aria-labelledby="galeria-title">
               {galleryItems.map((item) => (
                 <li key={item.id}>
-                  <GalleryCard item={item} load sizes="(max-width: 640px) 80vw, 312px" />
+                  <GalleryCard item={item} load sizes="(max-width: 640px) 90vw, 400px" />
                 </li>
               ))}
             </ul>

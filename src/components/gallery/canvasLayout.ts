@@ -32,7 +32,7 @@ export type CanvasLayout = {
   cells: Cell[];
   /** Limites da câmera: até onde o campo pode ser arrastado. */
   bounds: Bounds;
-  /** Câmera inicial, com o campo centralizado. */
+  /** Câmera inicial, centrada no cartão mais próximo do meio do campo. */
   home: { x: number; y: number };
 };
 
@@ -44,11 +44,11 @@ function jitter(c: number, r: number, salt: number) {
 
 export function computeLayout(vw: number, vh: number, n: number): CanvasLayout {
   const compact = vw < 640;
-  const cardW = compact ? 232 : 312;
-  // barra do navegador (30) + prévia 16:10 + rodapé com nome e categoria (66)
-  const cardH = 30 + Math.round((cardW * 10) / 16) + 66;
-  const gapX = compact ? 64 : 120;
-  const gapY = compact ? 56 : 88;
+  const cardW = compact ? 280 : 400;
+  // barra do navegador (30) + prévia 16:10 + rodapé com nome e categoria (74)
+  const cardH = 30 + Math.round((cardW * 10) / 16) + 74;
+  const gapX = compact ? 64 : 136;
+  const gapY = compact ? 56 : 96;
   const cellW = cardW + gapX;
   const cellH = cardH + gapY;
   // Margem livre entre o campo e a borda quando arrastado até o fim.
@@ -86,6 +86,20 @@ export function computeLayout(vw: number, vh: number, n: number): CanvasLayout {
   const ax = axis(left, right, vw);
   const ay = axis(top, bottom, vh);
 
+  // Abre centrado no cartão mais próximo do meio do campo: sempre um site inteiro à vista.
+  const midX = (left + right) / 2;
+  const midY = (top + bottom) / 2;
+  const focus = cells.reduce((best, c) =>
+    Math.hypot(c.bx + cardW / 2 - midX, c.by + cardH / 2 - midY) <
+    Math.hypot(best.bx + cardW / 2 - midX, best.by + cardH / 2 - midY)
+      ? c
+      : best,
+  );
+  const home = {
+    x: clamp(vw / 2 - cardW / 2 - focus.bx, ax.min, ax.max),
+    y: clamp(vh / 2 - cardH / 2 - focus.by, ay.min, ay.max),
+  };
+
   return {
     vw,
     vh,
@@ -97,7 +111,7 @@ export function computeLayout(vw: number, vh: number, n: number): CanvasLayout {
     rows,
     cells,
     bounds: { minX: ax.min, maxX: ax.max, minY: ay.min, maxY: ay.max },
-    home: { x: ax.center, y: ay.center },
+    home,
   };
 }
 
